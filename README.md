@@ -9,9 +9,9 @@ Because this is not an official Mozilla project, I'm calling it Twirlip and not 
 
 If I had more time, I'd have involved people on this list in planning this sprint, rather than just forge ahead without substantial discussion. But sometimes you have to "code first and ask questions later" in an agile way, to get good feedback given an all too common "failure of the imagination", right? :-) And hopefully once this system is working at a minimal level of functionality, future sprints could eventually be designed using the software itself in a bootstrapping way, time permitting. :-)
 
-== Day-by-day user stories and tasks for Thunderbird Server / Twirlip
+## Day-by-day user stories and tasks for Thunderbird Server / Twirlip
 
-= Saturday/Sunday:
+### Saturday/Sunday:
 
 User stories:
 
@@ -34,7 +34,7 @@ Tasks:
 * Create initial unit test for server that then stores and retrieves immutable data from the local file system
 * BACKLOG Hooking up tests and build script to a continuous integration build server (would be nice, but that CI part is probably not gonna happen this week by me)
 
-= Monday
+### Monday
 
 User stories:
 
@@ -50,7 +50,7 @@ Tasks:
 * Support searching annotations with specific text strings
 * Unit tests for each of the above (ideally written beforehand)
 
-= Tuesday
+### Tuesday
 
 User stories:
 
@@ -66,7 +66,7 @@ Tasks:
 * Use socket.io for real-time notifications to refresh the webapp GUI
 * Unit tests for each of the above (ideally written beforehand)
 
-= Wednesday
+### Wednesday
 
 User stories:
 
@@ -86,7 +86,7 @@ Tasks:
 https://mail.mozilla.org/pipermail/tb-planning/
 * Unit tests for each of the above (ideally written beforehand)
 
-= Thursday
+### Thursday
 
 User stories:
 
@@ -108,7 +108,7 @@ Tasks:
 * Read new tb-planning post either from a local Thunderbird mbox or by reloading the pipermail archive.
 * Unit tests for each of the above (ideally written beforehand)
 
-= Friday
+### Friday
 
 User stories:
 
@@ -131,7 +131,7 @@ Tasks:
 
 The results of all of these tasks will be very crude as far as UX but should be minimally useable for the tasks outlined. Ideally the resulting application should work well enough that current Thunderbird users with POP accounts with very basic email needs could switch to it as their primary email client and only use Thunderbird desktop only for more specialized cases (not without some pain and loss of functionality, of course). So, this first week will create a minimal "eat our own dog food" base that could be improved upon by a team using this exact tool over the next year to discuss and plan how to make something really awesome. :-)
 
-== Architecture and other project information
+## Architecture and other project information
 
 License: MPL 2 for now. I'm open to perhaps changing that to Apache or maybe something else based on feedback if someone made a case for that soon. I don't especially know what is best here, and have tended to use GPL for previous large projects and MIT/BSD for smaller ones. Mozilla says Apache 2 is acceptable for new projects, but still seems to suggest MPL 2 for product code: https://www.mozilla.org/en-US/MPL/license-policy/
 
