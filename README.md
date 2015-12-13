@@ -95,15 +95,15 @@ User stories:
 
 Tasks:
 
-* Create GUI for adding information about email POP accounts
-* Read emails from a POP account (without deleting them!)
-* Provide configuration instructions for Thunderbird users on how to leave POP email on the server for a few days after reading so this application can also pick them up (or do the next task)
+* Create GUI for adding information about email POP3 accounts
+* Read emails from a POP3 account (without deleting them!)
+* Provide configuration instructions for Thunderbird users on how to leave POP3 email on the server for a few days after reading so this application can also pick them up (or do the next task)
 * BACKLOG Read new emails from an IMAP account
 * Make it easy for this system to quickly read new mail from a 
 * Support composing new emails in the webapp
 * Support saving drafts of new emails without sending them
 * Create GUI for defining basic SMTP information
-* Send plain text email messages via SMPT
+* Send plain text email messages via SMTP
 * Make first post to tb-planning sent from the application
 * Read new tb-planning post either from a local Thunderbird mbox or by reloading the pipermail archive.
 * Unit tests for each of the above (ideally written beforehand)
@@ -129,7 +129,7 @@ Tasks:
 * BACKLOG Support doing the same via IRC and RSS using a common infrastructure if time permits
 * Unit tests for each of the above (ideally written beforehand)
 
-The results of all of these tasks will be very crude as far as UX but should be minimally useable for the tasks outlined. Ideally the resulting application should work well enough that current Thunderbird users with POP accounts with very basic email needs could switch to it as their primary email client and only use Thunderbird desktop only for more specialized cases (not without some pain and loss of functionality, of course). So, this first week will create a minimal "eat our own dog food" base that could be improved upon by a team using this exact tool over the next year to discuss and plan how to make something really awesome. :-)
+The results of all of these tasks will be very crude as far as UX but should be minimally useable for the tasks outlined. Ideally the resulting application should work well enough that current Thunderbird users with POP3 accounts with very basic email needs could switch to it as their primary email client and only use Thunderbird desktop only for more specialized cases (not without some pain and loss of functionality, of course). So, this first week will create a minimal "eat our own dog food" base that could be improved upon by a team using this exact tool over the next year to discuss and plan how to make something really awesome. :-)
 
 ## Architecture and other project information
 
