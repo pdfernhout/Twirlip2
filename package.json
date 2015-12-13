@@ -31,6 +31,7 @@
   "homepage": "https://github.com/pdfernhout/Twirlip2",
   "dependencies": {
     "chai": "^3.4.1",
+    "express": "^4.13.3",
     "mocha": "^2.3.4"
   }
 }
