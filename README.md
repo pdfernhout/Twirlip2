@@ -26,8 +26,8 @@ Tasks:
 * DONE Create initial project package
 * Make initial decision about file format for backend
 * Create initial project build script
-* DONE Pick unit testing framework for client (tsUnit.ts)
-* DONE Pick unit testing framework for server (tsUnit.ts)
+* DONE Pick unit testing framework for client (mocha, chai, tsUnit.ts)
+* DONE Pick unit testing framework for server (mocha, chai)
 * Have Node.js host a webapp that displays "Hello World" or similar with Mithril 
 * Verify the results of the hello world display as a test
 * Create code to store immutable data in file system
