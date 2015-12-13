@@ -1,0 +1,32 @@
+{
+  "name": "Twirlip",
+  "version": "0.0.1",
+  "description": "A tool for messaging inspired by Thunderbird but implemented as a Node.js webserver and Mithril webapp",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pdfernhout/Twirlip2.git"
+  },
+  "keywords": [
+    "messaging",
+    "email",
+    "irc",
+    "rss",
+    "thunderbird",
+    "mithril",
+    "node.js",
+    "triplestore"
+  ],
+  "author": "Paul D. Fernhout",
+  "license": "MPL2",
+  "bugs": {
+    "url": "https://github.com/pdfernhout/Twirlip2/issues"
+  },
+  "homepage": "https://github.com/pdfernhout/Twirlip2"
+}
