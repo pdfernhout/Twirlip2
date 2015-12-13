@@ -23,11 +23,11 @@ Tasks:
 
 * DONE Write up this document.
 * DONE Set up GitHub project (https://github.com/pdfernhout/Twirlip2)
-* Create initial project package
+* DONE Create initial project package
 * Make initial decision about file format for backend
 * Create initial project build script
-* Pick unit testing framework for client
-* Pick unit testing framework for server
+* DONE Pick unit testing framework for client (tsUnit.ts)
+* DONE Pick unit testing framework for server (tsUnit.ts)
 * Have Node.js host a webapp that displays "Hello World" or similar with Mithril 
 * Verify the results of the hello world display as a test
 * Create code to store immutable data in file system
