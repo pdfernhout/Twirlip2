@@ -147,3 +147,17 @@ Plugin architecture: Just gonna wing it using JavaScript modules and some adhoc 
 
 Trademark: Since this project has no official approval, it can't be called Thunderbird Server. So, I'm calling it "Twirlip" because I already have Vernor Vinge's approval from years ago to use that term for information management software -- the term comes from his book "A Fire Upon the Deep". :-) In this context, "Twirlip" could be seen to stand for: "Thunderbird Wholistic Information Resource Linking Integrated Platform". For now, I'm keeping Twirlip as a trademark I control myself. If Mozilla really wanted to support such a project, trademark ownership might be a non-issue as the project would probably then be called Thunderbird, or we could talk about Mozilla controlling the Twirlip trademark if it was used in a way to identify the sort of broad platform I've defined here and elsewhere, such as:
 http://pdfernhout.net/thunderbirds-are-grow-manifesto.html
+
+## Why not a more realistic agenda?
+
+This agenda perhaps should realistically be six weeks of work where each day here becomes a week-long sprint and involves feedback from other developers and the user community, especially in the planning stages and creation of user stories. That would make such a project more true to the spirit of Thunderbird and its community of developers to go beyond what I can provide myself (even as a long-time Thunderbird user, but mostly avoiding plugins so having a narrower view than some). Not having that time luxury at this point, I'll still do what I can where I can given a week-long timebox. Without doing every phase of this agenda even in an abbreviated way, the results would not reflect the breadth of the proof-of-concept I have in mind, which is why this sprint is going to cover a lot of ground but very shallowly.
+
+As one of my heroes, Dan Ingalls, said [about the initial coding of the innovative Smalltalk](https://jaortega.wordpress.com/2006/01/31/dan-ingalls-videos-on-object-oriented-programming/) (in BASIC of all things): "You just do it and it’s done." :-)
+
+This project is an iffy proposition for all sorts of reasons, like if existing Node.js mail handling and IRC libraries are just too buggy, or if I get called away from this project for some reason. I'm still hoping though something usable might be ready in a week.
+
+Even if this specific project accomplishes this agenda in a week, the project may not go anywhere after that limited success though for all sorts of reasons. But even a limited success could still be a useful example for [the Thunderbird Planning group](https://mail.mozilla.org/listinfo/tb-planning) to think about in terms of what a real Thunderbird Server project might look like if Mozilla got behind some future effort. So, I hope this project eventually adds to the discussion here one way or another.
+
+If I don't respond to any emails about this project anytime soon, it will hopefully be because I am busy coding. :-)
+
+ThunderbirdS are grow! :-)
