@@ -28,5 +28,9 @@
   "bugs": {
     "url": "https://github.com/pdfernhout/Twirlip2/issues"
   },
-  "homepage": "https://github.com/pdfernhout/Twirlip2"
+  "homepage": "https://github.com/pdfernhout/Twirlip2",
+  "dependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
+  }
 }
