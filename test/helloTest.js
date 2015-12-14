@@ -1,18 +1,14 @@
-console.log("Hello world test under development");
+console.log("Hello world test is being called");
 
 var expect = require("chai").expect;
 
-describe("Color Code Converter", function() {
-  describe("RGB to Hex conversion", function() {
-    it("converts the basic colors", function() {
+describe("Hello mocha test suite", function() {
+    it("check addition", function() {
         var result = 10;
-        expect(result).to.equal("ff0000");
+        expect(2 + 2).to.equal(4);
     });
-  });
 
-  describe("Hex to RGB conversion", function() {
-    it("converts the basic colors", function() {
-
+    it("check strlen", function() {
+        expect("hello".length).to.equal(5);
     });
-  });
 });
