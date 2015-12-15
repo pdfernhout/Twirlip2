@@ -39,7 +39,7 @@ StoreMemory.prototype.wrap = function(what, metadata) {
 StoreMemory.prototype.store = function(data) {
     var dataAsString = JSON.stringify(data);
     var sha256 = crypto.createHash('sha256').update(dataAsString, 'utf8').digest('hex');
-    console.log("calculated sha256 of data to store", sha256);
+    // console.log("calculated sha256 of data to store", sha256);
     
     this.storedData[sha256] = data;
     return makeAlwaysSuccessfulPromise(sha256);
@@ -47,7 +47,7 @@ StoreMemory.prototype.store = function(data) {
 
 StoreMemory.prototype.fetch = function(sha256) {
     var result = this.storedData[sha256];
-    console.log("retrieved result", result);
+    // console.log("retrieved result", result);
     return makeAlwaysSuccessfulPromise(result);
 };
     
