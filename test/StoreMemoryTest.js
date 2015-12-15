@@ -6,7 +6,7 @@ describe("Pointrel20151212 StoreMemory test", function() {
     var store = new StoreMemory();
     
     var testString = "test";
-    var sha256OfTest = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
+    var sha256OfTest = "4d967a30111bf29f0eba01c448b375c1629b2fed01cdfcc3aed91f1b57d5dd5e";
 
     it("stores a test string", function() {
         var promise = store.store(testString);
@@ -21,7 +21,7 @@ describe("Pointrel20151212 StoreMemory test", function() {
         console.log("about to call promise for fetch", promise);
         return promise.then(function (result) {
             console.log("result of fetch test is", result);
-            expect(result.what).to.equal(testString);
+            expect(result).to.equal(testString);
         });
     });
 });
