@@ -46,7 +46,7 @@ Tasks:
 
 Note: The data storage has proved to be a big stumbling block delaying everything as it stretches into Wednesday.
 Of course, I like that data storage part, so no big surprise I'll pay extra attention to it. :-)
-Here are notes for [a sharding storage design](design/data-storage-design.md) and [processing overview](design/data-processing-overview).
+Here are notes for [a sharding storage design](design/data-storage-design.md) and [processing overview](design/data-processing-overview.md).
 Also, I thought of doing testing with a memory-based store, so the initial focus has been on
 that as a test-supporting component rather than disk storage, and there is a good unit test for that. 
 I am deferring storing data to the file system until the PIs are worked out better during the next day or two; permanent storage is not even needed for a demo I realize.
