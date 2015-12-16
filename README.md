@@ -11,7 +11,7 @@ If I had more time, I'd have involved people on this list in planning this sprin
 
 ## Day-by-day user stories and tasks for Thunderbird Server / Twirlip
 
-### Saturday/Sunday:
+### Saturday/Sunday 2015-12-12 to 2015-12-13:
 
 User stories:
 
@@ -30,11 +30,32 @@ Tasks:
 * DONE Have Node.js host a webapp that displays "Hello World" or similar [without Mithril]
 * DONE Verify the results of the hello world display as a test
 * DONE Make initial decision about file format for backend
-* Create code to store immutable data in file system
-* Create initial unit test for server that then stores and retrieves immutable data from the local file system
+* DEFER Create code to store immutable data in file system
+* DEFER Create initial unit test for server that then stores and retrieves immutable data from the local file system
 * BACKLOG Hooking up tests and build script to a continuous integration build server (would be nice, but that CI part is probably not gonna happen this week by me)
 
-### Monday
+### Monday and Tuesday (extra two days unplanned) 2015-12-14 to 2015-12-15
+
+* DONE Create code to store immutable data in a memory store for testing
+* DONE Create initial unit test for server that then stores and retrieves immutable data from the memory store
+* DONE Write emails hoping to recruit support from other groups
+* DONE Review some discussions of messaging and immutable storage on the web
+* DONE Create a design document about the immutable storage needs
+* DONE Create a design document about the high-level comprehensive processing needs
+* DONE Deal with immediate consequences of 2011 MacbookPro laptop failing by setting up new Eclipse install
+
+Note: The data storage has proved to be a big stumbling block delaying everything as it stretches into Wednesday.
+Of course, I like that data storage part, so no big surprise I'll pay extra attention to it. :-)
+Here are notes for [a sharding storage design](design/data-storage-design.md) and [processing overview](design/data-processing-overview).
+Also, I thought of doing testing with a memory-based store, so the initial focus has been on
+that as a test-supporting component rather than disk storage, and there is a good unit test for that. 
+I am deferring storing data to the file system until the PIs are worked out better during the next day or two; permanent storage is not even needed for a demo I realize.
+Distractive email sending and some technical issues with a failed laptop have also slowed progress.
+Still hoping to catch up to the schedule as far as what day to be able to send an email by Thursday,
+but unlikely. So, I'm adjusting the schedule by two days. Sorry about the slippage; as I said at the beginning, this was an ambitious schedule (and beyond what I should be doing myself anyway).
+On the plus side, mocha unit testing is working out well and I'm glad I put the time up-front into settign that up.
+
+### Wednesday (was originally Monday) 2015-12-16
 
 User stories:
 
@@ -50,7 +71,7 @@ Tasks:
 * Support searching annotations with specific text strings
 * Unit tests for each of the above (ideally written beforehand)
 
-### Tuesday
+### Thursday (was originally Tuesday) 2015-12-17
 
 User stories:
 
@@ -66,7 +87,7 @@ Tasks:
 * Use socket.io for real-time notifications to refresh the webapp GUI
 * Unit tests for each of the above (ideally written beforehand)
 
-### Wednesday
+### Friday (was originally Wednesday) 2015-12-18
 
 User stories:
 
@@ -86,7 +107,7 @@ Tasks:
 https://mail.mozilla.org/pipermail/tb-planning/
 * Unit tests for each of the above (ideally written beforehand)
 
-### Thursday
+### Saturday (was originally Thursday) 2015-12-19
 
 User stories:
 
@@ -108,7 +129,7 @@ Tasks:
 * Read new tb-planning post either from a local Thunderbird mbox or by reloading the pipermail archive.
 * Unit tests for each of the above (ideally written beforehand)
 
-### Friday
+### Sunday (was originally Friday) 2015-12-20
 
 User stories:
 
