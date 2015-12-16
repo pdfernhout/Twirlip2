@@ -29,7 +29,7 @@ Tasks:
 * DONE Pick unit testing framework for server (mocha, chai)
 * DONE Have Node.js host a webapp that displays "Hello World" or similar [without Mithril]
 * DONE Verify the results of the hello world display as a test
-* Make initial decision about file format for backend
+* DONE Make initial decision about file format for backend
 * Create code to store immutable data in file system
 * Create initial unit test for server that then stores and retrieves immutable data from the local file system
 * BACKLOG Hooking up tests and build script to a continuous integration build server (would be nice, but that CI part is probably not gonna happen this week by me)
