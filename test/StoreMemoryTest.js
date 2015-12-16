@@ -43,7 +43,7 @@ describe("Pointrel20151212 StoreMemory test", function() {
         // console.log("about to call promise for fetch", promise);
         return promise.then(function (result) {
             // console.log("result of fetch test is", result);
-            expect(result).to.equal(testObject);
+            expect(JSON.stringify(result)).to.equal(JSON.stringify(testObject));
         });
     });
 });
