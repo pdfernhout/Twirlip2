@@ -1,5 +1,5 @@
 // Test at: http://localhost:9000
-/*jslint node: true */
+/* jslint node: true */
 "use strict";
 
 // Standard nodejs modules
@@ -57,10 +57,12 @@ app.use(function(err, req, res, next){
     res.status(500).send('Something broke!');
 });
 
+/*
 app.use("/", function (request, response) {
     response.writeHead(200, {"Content-Type": "text/plain"});
     response.end("ThunderbirdS Are Grow!\n");
 });
+*/
 
 var server = http.createServer(app);
 

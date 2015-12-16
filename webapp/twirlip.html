@@ -21,7 +21,16 @@ var require = {
     waitSeconds: 20,
     paths: {
         js: "js",
-        mithril: "lib/mithril/mithril"
+        mithril: "lib/mithril/mithril",
+        d3: "lib/d3/d3",
+        humane: "lib/humane/humane",
+        lodash: "lib/lodash",
+        jstat: "lib/jstat",
+        Blob: "lib/fileSaver/Blob",
+        FileSaver: "lib/fileSaver/FileSaver",
+        stackblur: "lib/canvg/StackBlur",
+        rgbcolor: "lib/canvg/rgbcolor",
+        canvgModule: "lib/canvg/canvg"
     }
 };
 </script>
@@ -52,7 +61,7 @@ var require = {
     <div id="mainDiv" style="overflow: auto"></div>
   
     <script>
-    require(["js/twilip-main"], function(twilipMain) {
+    require(["js/twirlip-main"], function(twirlipMain) {
         // No need to run anything here as the module will start itself up
     });
     </script>
