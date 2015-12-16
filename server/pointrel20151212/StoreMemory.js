@@ -6,6 +6,8 @@ var uuid = require('node-uuid');
 
 var maxShardLength = 4096000;
 
+var debugLogging = false;
+
 function makeAlwaysSuccessfulPromise(result) {
     var promise = new Promise(function (resolve, reject) {
         // reject("Unfinished");
@@ -30,7 +32,7 @@ function StoreMemory(defaultMetadata) {
 
 StoreMemory.prototype.allocateNewShard = function() {
     this.currentShardName = makeShardName();
-    console.log("Making new shard", this.currentShardName);
+    if (debugLogging) console.log("Making new shard", this.currentShardName);
     this.shards[this.currentShardName] = "";
 };
 
@@ -66,10 +68,16 @@ StoreMemory.prototype.store = function(data) {
     var dataAsString = JSON.stringify(data);
     if (dataAsString.length > maxShardLength) throw new Error("data to be stored is too long: " + dataAsString.length);
     var sha256 = crypto.createHash('sha256').update(dataAsString, 'utf8').digest('hex');
-    // console.log("calculated sha256 of data to store", sha256);
     
-    var location = this.writeToCurrentShard(dataAsString);
-    this.sha256ToShardAndPosition[sha256] = location;
+	var location = this.sha256ToShardAndPosition[sha256];
+	if (!location) {
+	    location = this.writeToCurrentShard(dataAsString);
+	    if (debugLogging) console.log("store: sha256 and location of data to store", sha256, location, dataAsString.substring(0, 40) + "...");
+	    this.sha256ToShardAndPosition[sha256] = location;
+	} else {
+		if (debugLogging) console.log("store: previously stored ", sha256, location, dataAsString.substring(0, 40) + "...");
+	}
+	
     return makeAlwaysSuccessfulPromise(sha256);
 };
 
