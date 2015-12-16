@@ -55,7 +55,8 @@ Of course, I like that data storage part, so no big surprise I'll pay extra atte
 Here are notes for [a sharding storage design](design/data-storage-design.md) and [processing overview](design/data-processing-overview.md).
 Also, I thought of doing testing with a memory-based store, so the initial focus has been on
 that as a test-supporting component rather than disk storage, and there is a good unit test for that. 
-I am deferring storing data to the file system until the storage and indexing APIs (including an in-memory indexer) are worked out better during the next day or tw.
+I am deferring storing data to the file system until the storage and indexing APIs
+(including an in-memory indexer) are worked out better during the next couple of days supporting RSS, IRC, and email UI tasks.
 Permanent storage is not even needed for a demo I am realizing, although I still want to demonstrate it during the sprint so it is getting left towards the end.
 
 ### Wednesday (was originally Monday) 2015-12-16
