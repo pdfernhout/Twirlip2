@@ -32,7 +32,7 @@ function StoreMemory(defaultMetadata) {
 
 StoreMemory.prototype.allocateNewShard = function() {
     this.currentShardName = makeShardName();
-    if (debugLogging) console.log("Making new shard", this.currentShardName);
+    if (debugLogging) console.log("StoreMemory: Making new shard", this.currentShardName);
     this.shards[this.currentShardName] = "";
 };
 
@@ -40,14 +40,10 @@ StoreMemory.prototype.writeToCurrentShard = function(dataString) {
 	if (this.shards[this.currentShardName].length > maxShardLength) {
 		this.allocateNewShard();
 	}
-	var start = this.shards[this.currentShardName].length;
-	this.shards[this.currentShardName] += dataString + "\n";
+	var start = this.shards[this.currentShardName].length + 1;
+	this.shards[this.currentShardName] += "\n" + dataString + "\n";
 	return {shardName: this.currentShardName, start: start, length: dataString.length};
 };
-
-function isString(value) {
-    return typeof value === 'string' || value instanceof String;
-}
 
 StoreMemory.prototype.wrap = function(what, metadata) {      
     if (!metadata) metadata = {};
