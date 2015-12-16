@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- Next three lines from: http://stackoverflow.com/questions/12021794/android-browser-ignores-responsive-web-design -->
+<meta content="True" name="HandheldFriendly">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="viewport" content="width=device-width">
+
+<title>Twirlip / Thunderbird Server Proof-Of-Concept</title>
+
+<link rel="stylesheet" href="css/twirlip.css">
+
+<script>
+if (console === undefined) console = {"log": function(){ } };
+
+var require = {
+    baseUrl: '',
+    waitSeconds: 20,
+    paths: {
+        js: "js",
+        mithril: "lib/mithril/mithril"
+    }
+};
+</script>
+
+<script src="lib/require.min.js"></script>
+
+</head>
+
+<body>
+    <noscript>Please enable JavaScript to use Twirlip / Thunderbird Server Proof-of-Concept.</noscript>
+    <div id="pleaseWaitDiv" class="pleaseWaitOverlay" style="display: none"><em>Starting up Twirlip / Thunderbird Server Proof-of-Concept; please wait...</em></div>
+    <script>
+    console.log("started loading...", new Date());
+    // A delay to keep the please wait from flickering if loads page quickly
+    // This needs to be done here in case the delay is from loading other modules.
+    // Creates global window.twirlip_pleaseWaitTimeout
+    var pleaseWaitStartupDelay_ms = 500;
+    function showPleaseWaitAfterDelayMillisecond(delay_ms) {
+        window.twirlip_pleaseWaitTimeout = setTimeout(function() {
+            console.log("showed please wait at", new Date());
+            window.twirlip_pleaseWaitTimeout = null;
+            document.getElementById("pleaseWaitDiv").style.display = "block";
+        }, delay_ms);
+    }
+    showPleaseWaitAfterDelayMillisecond(500);
+    </script>
+    
+    <div id="mainDiv" style="overflow: auto"></div>
+  
+    <script>
+    require(["js/twilip-main"], function(twilipMain) {
+        // No need to run anything here as the module will start itself up
+    });
+    </script>
+</body>
+
+</html>
