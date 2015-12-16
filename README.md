@@ -45,15 +45,18 @@ Tasks:
 * DONE Deal with immediate consequences of 2011 MacbookPro laptop failing by setting up new Eclipse install
 
 Note: The data storage has proved to be a big stumbling block delaying everything as it stretches into Wednesday.
+Distractive email sending has slowed coding progress. So has a technical issues with a failed laptop. :-(
+Still hoping to catch up to the schedule as far as what day to be able to send an email by Thursday,
+but unlikely. So, I'm adjusting the schedule by two days into the next weekend. Sorry about the slippage; as I said at the beginning, this was an ambitious schedule (and beyond what I should be doing myself anyway).
+
+On the plus side, mocha unit testing is working out well and I'm glad I put the time up-front into setting that up.
+
 Of course, I like that data storage part, so no big surprise I'll pay extra attention to it. :-)
 Here are notes for [a sharding storage design](design/data-storage-design.md) and [processing overview](design/data-processing-overview.md).
 Also, I thought of doing testing with a memory-based store, so the initial focus has been on
 that as a test-supporting component rather than disk storage, and there is a good unit test for that. 
-I am deferring storing data to the file system until the PIs are worked out better during the next day or two; permanent storage is not even needed for a demo I realize.
-Distractive email sending and some technical issues with a failed laptop have also slowed progress.
-Still hoping to catch up to the schedule as far as what day to be able to send an email by Thursday,
-but unlikely. So, I'm adjusting the schedule by two days. Sorry about the slippage; as I said at the beginning, this was an ambitious schedule (and beyond what I should be doing myself anyway).
-On the plus side, mocha unit testing is working out well and I'm glad I put the time up-front into settign that up.
+I am deferring storing data to the file system until the storage and indexing APIs (including an in-memory indexer) are worked out better during the next day or tw.
+Permanent storage is not even needed for a demo I am realizing, although I still want to demonstrate it during the sprint so it is getting left towards the end.
 
 ### Wednesday (was originally Monday) 2015-12-16
 
