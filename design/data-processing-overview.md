@@ -78,11 +78,12 @@ Key activities in Twirlip include the need to:
 * classify incoming or transformed data both automatically and manually by tagging
 * make inferences about data based on its structure or content to support classification and reasoning
 * build and maintain indexes into the data for specific purposes including to filter and sort the data
-* transform stored data from one form to another, including to consolidate or distill/summarize it
+* transform stored data from one form to another, including to consolidate, normalize, and/or distill/summarize it
 * load a subset of data relevant to some purpose into working memory via consulting a pre-calculated index
 * support processing (including reasoning) by humans or algorithms involving a subset of the data, with results fed back into the system
 * answer who, what, where, when, why, how, and similar questions about events implied by the data
 * support construction of arbitrary new data
+* support broadcasting new messages or forwarding existing ones by sending or storing them through other services.
 
 These activities are drawn from Helland's "Mulligan Stew" paper above,
 plus a few more from other sources. The above is in a very rough typical time order
@@ -127,5 +128,10 @@ a capacity that often gets pressed into service for storing local data in email 
 As in the key activities section, Twirlip cycles through ingest, parse, store, wrap, classify/infer, index, transform, load,
 process, query, create activities. These stages could all apply to messages of any type.
 
-So, a first step is to
+So, a first step is to ingest messages (into temporary memory or directly into long-term storage).
+Then they are parsed, likely labelled with a unique identity, possibly wrapped with contextual information, and transformed into a common normalized form that is stored long-term.
+And index is maintained on key items of interest needed to support a user interface,
+like a GUI where users can select/filter a subset of messages and sort them on fields like
+from, to, original source, timestamps, titles, and added metadata like adding a star, tag, field/value, or free form annotation.
+Draft messages (or notes) can be made as new "memo to self" messages and tagged as such for later transformation/editing and then possible broadcast/sending.
 
