@@ -38,6 +38,13 @@ When new data is added, code for the indexing/application plugins will be run to
 
 * Object sizes will be limited to 10MB of text.
 
+* Applications need to treat seeing a duplicate object as an idempotent operation that is OK and changes nothing.
+
+* (Uncertain) JSON will be used to store the objects in flat files (or maybe YAML?)
+
+* Object IDs will be like so for references: pointrel:Type:sha256Hash:length:mimeType 
+
+* Object IDs will be like so for immediate data (typically < 64 bytes): pointrel:Type:#:mimeType:utf8TextWithoutNewLineOrSpaces
 
 
 
