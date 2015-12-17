@@ -44,10 +44,12 @@ function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCa
     httpRequest.send(data);
 }
 
+var testURL = "http://static.fsf.org/fsforg/rss/news.xml";
+
 export function initialize() {
     console.log("test data:", testData);
 
-    apiRequestSend("/api/proxy", { request: "some url" }, 10000, (result) => {
+    apiRequestSend("/api/proxy", { url: testURL }, 10000, (result) => {
         fetchResult = result;
         console.log("proxy request success", result);
         m.redraw();
