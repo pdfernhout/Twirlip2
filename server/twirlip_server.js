@@ -44,7 +44,19 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+// Support 
+
+function proxyRequest(body, callback) {
+	callback({success: true, status: "success", result: "Unfinished"});
+}
+
 // Application routes
+
+app.post("/api/proxy", function (request, response) {
+    proxyRequest(request.body, function (requestResultMessage) {
+        response.json(requestResultMessage);
+    });
+});
 
 app.use("/$", function(req, res) {
     res.redirect('/twirlip.html');

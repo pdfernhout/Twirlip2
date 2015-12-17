@@ -8,21 +8,33 @@ rssPlugin.initialize();
 
 // Test: http://localhost:9000/twirlip.html
 
+var PageDisplayer: any = {
+    controller: function(args) {
+        // console.log("PageDisplayer created");
+    },
+
+    view: function(controller, args) {
+        // console.log("========== view called in PageDisplayer ==========");
+        
+        return m("div.pageContents", { key: "pageContents" }, [
+            "Hello world from Twirlip",
+            m("hr"),
+            "ThunderbirdS Are Grow!",
+            " ",
+            m("a", { href: "http://pdfernhout.net/thunderbirds-are-grow-manifesto.html" }, "manifesto!"),
+            " ",
+            m("a", { href: "http://www.yorkmaze.com/thunderbirds-are-grow/" }, "coincidence?"),
+            " :-)",
+            rssPlugin.display()
+        ]);
+    }
+};
+
 function createLayout() {
     console.log("createLayout");
 
-    var mainDiv = document.getElementById("mainDiv");
-    m.render(mainDiv, m("div", [
-        "Hello world from Twirlip",
-        m("hr"),
-        "ThunderbirdS Are Grow!",
-        " "
-        m("a", { href: "http://pdfernhout.net/thunderbirds-are-grow-manifesto.html" }, "manifesto!"),
-        " ",
-        m("a", { href: "http://www.yorkmaze.com/thunderbirds-are-grow/" }, "coincidence?"),
-        rssPlugin.display()
-    ]));
-    
+    m.mount(document.getElementById("mainDiv"), PageDisplayer);
+
     // turn off initial "please wait" display
     hidePleaseWait();
 }
