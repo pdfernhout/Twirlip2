@@ -1,3 +1,3 @@
-ThunderbirdS Are Grow!  
-Please help make this plugin go,  
-Then we all will know!  
+This plugin reads RSS feeds.
+
+It may write them in the future too.

@@ -2,6 +2,10 @@
 
 import m = require("mithril");
 
+// Temp for now -- need to generalize plugin loading
+import rssPlugin = require("./plugins-for-local-libre-or-standard-services/rss/rss-plugin");
+rssPlugin.initialize();
+
 // Test: http://localhost:9000/twirlip.html
 
 function createLayout() {
@@ -15,7 +19,8 @@ function createLayout() {
         " "
         m("a", { href: "http://pdfernhout.net/thunderbirds-are-grow-manifesto.html" }, "manifesto!"),
         " ",
-        m("a", { href: "http://www.yorkmaze.com/thunderbirds-are-grow/" }, "coincidence?")
+        m("a", { href: "http://www.yorkmaze.com/thunderbirds-are-grow/" }, "coincidence?"),
+        rssPlugin.display()
     ]));
     
     // turn off initial "please wait" display
