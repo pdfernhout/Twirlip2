@@ -1,5 +1,3 @@
-import m = require("mithril");
-
 "use strict";
 
 // This constructs a nested Mithril object with only specific HTML tags allowed
@@ -58,7 +56,7 @@ var allowedCSSClasses = {
     "narrafirma-special-warning": 1
 };
 
-export function generateSanitizedHTMLForMithril(html) {
+export function generateSanitizedHTMLForMithril(m, html) {
     // console.log("html", html);
     
     if (html === undefined || html === null) {
