@@ -1,5 +1,8 @@
 "use strict";
 
+// TODO: There seems to be some kind of occasional character encoding issue here, where & items end up displayed as codes not characters.
+// TODO: Wondering if there is an issue where request converts to JSON and some character encoding is ignored?
+
 import m = require("mithril");
 import sanitizeHTML = require("../../sanitizeHTML");
 import dompurify = require("dompurify");
@@ -29,7 +32,7 @@ var testURL = sampleFeeds[0];
 var rssFeedInstance = {items: []};
 var fetchResult = { status: "idle" };
 var currentURL = "";
-var displayMode = "text";
+var displayMode = "raw";
 var loadingError = "";
 var sourceContent = "";
 
@@ -136,6 +139,7 @@ function newURL(url) {
     apiRequestSend("/api/proxy", { url: url }, 10000, (result) => {
         fetchResult = { status: "OK" };
         sourceContent = result.content;
+        // console.log("sourceContent", sourceContent);
         rssFeedInstance = parseRSS(sourceContent);
         // console.log("proxy request success", result);
         m.redraw();
@@ -153,7 +157,7 @@ function displayModeChange(newMode) {
 }
 
 function displayModeChooser() {
-    var result: any = ["source", "text", "unforgiving", "strict", "links", "images", "dompurify", "very unsafe html"].map((mode) => {
+    var result: any = ["document", "raw", "basic html", "images", "dompurify", "very unsafe html"].map((mode) => {
         var selected = (displayMode === mode) ? "*" : "";
         return [ m("button", {onclick: displayModeChange.bind(null, mode)}, selected + mode + selected)];
     });
@@ -162,14 +166,14 @@ function displayModeChooser() {
 }
 
 function displayDescription(description) {
-    // "source" option is handled elsewhere
-    if (displayMode === "unforgiving") return sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(m, description);
-    if (displayMode === "strict") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {});
-    if (displayMode === "links") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {allowLinks: true});
+    // "document" option is handled elsewhere
+    // if (displayMode === "alternative") return sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(m, description);
+    // if (displayMode === "tags") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {});
+    if (displayMode === "basic html") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {allowLinks: true});
     if (displayMode === "images") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {allowLinks: true, allowImages: true});
     if (displayMode === "dompurify") return m.trust(dompurify.sanitize(description));
     if (displayMode === "very unsafe html") return m.trust(description);
-    if (displayMode !== "text") console.log("unexpected displayMode:", displayMode);
+    if (displayMode !== "raw") console.log("unexpected displayMode:", displayMode);
     return description;
 }
 
@@ -198,7 +202,7 @@ function displayRSS() {
         m("br"),
         JSON.stringify(fetchResult),
         m("br"),
-        displayMode === "source" ?
+        displayMode === "document" ?
             [sourceContent, m("br")] :
             [
                 rssFeedInstance.items.map(displayItem),
