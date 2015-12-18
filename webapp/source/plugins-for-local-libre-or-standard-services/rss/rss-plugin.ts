@@ -7,7 +7,7 @@ import exampleRSS = require("./rssFeedExampleFromFSF");
 var testURL = "http://static.fsf.org/fsforg/rss/news.xml";
 // var testURL = "http://portland.craigslist.org/sof/index.rss";
 
-var testData;
+var rssFeedInstance = {items: []};
 var fetchResult = { status: "pending" };
 
 function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCallback) {
@@ -91,11 +91,11 @@ export function initialize() {
     // console.log("test data:", testData);
 
     console.log("exampleRSS", exampleRSS);
-    testData = parseRSS(exampleRSS.content);
+    // testData = parseRSS(exampleRSS.content);
     
-    /*
     apiRequestSend("/api/proxy", { url: testURL }, 10000, (result) => {
-        fetchResult = result;
+        fetchResult = { status: "OK" };
+        rssFeedInstance = parseRSS(result.content);
         console.log("proxy request success", result);
         m.redraw();
     }, (failed) => {
@@ -103,7 +103,6 @@ export function initialize() {
         fetchResult = { status: "pending" };
         m.redraw();
     });
-    */
     console.log("RSS plugin initialized");
 }
 
@@ -128,7 +127,7 @@ function displayRSS() {
     return m("div.feed", [
         JSON.stringify(fetchResult),
         m("br"),
-        testData.items.map(displayItem)
+        rssFeedInstance.items.map(displayItem)
     ]);
 }
 
