@@ -29,7 +29,7 @@ var testURL = sampleFeeds[0];
 var rssFeedInstance = {items: []};
 var fetchResult = { status: "idle" };
 var currentURL = "";
-var displayMode = "sanitized";
+var displayMode = "text";
 var loadingError = "";
 var sourceContent = "";
 
@@ -131,7 +131,7 @@ function newURL(url) {
     loadingError = "";
     sourceContent = "";
     rssFeedInstance = {items: []};
-    if (displayMode === "unsafe html") displayMode = "images";
+    if (displayMode === "very unsafe html") displayMode = "images";
     // TODO: m.request({method: "POST", url: "/api/proxy"}).then( ...
     apiRequestSend("/api/proxy", { url: url }, 10000, (result) => {
         fetchResult = { status: "OK" };
@@ -153,7 +153,7 @@ function displayModeChange(newMode) {
 }
 
 function displayModeChooser() {
-    var result: any = ["source", "text", "sanitized", "images", "dompurify", "unsafe html"].map((mode) => {
+    var result: any = ["source", "text", "unforgiving", "strict", "links", "images", "dompurify", "very unsafe html"].map((mode) => {
         var selected = (displayMode === mode) ? "*" : "";
         return [ m("button", {onclick: displayModeChange.bind(null, mode)}, selected + mode + selected)];
     });
@@ -163,10 +163,12 @@ function displayModeChooser() {
 
 function displayDescription(description) {
     // "source" option is handled elsewhere
-    if (displayMode === "sanitized") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description);
-    if (displayMode === "images") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description, {allowImages: true});
+    if (displayMode === "unforgiving") return sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(m, description);
+    if (displayMode === "strict") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {});
+    if (displayMode === "links") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {allowLinks: true});
+    if (displayMode === "images") return sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, description, {allowLinks: true, allowImages: true});
     if (displayMode === "dompurify") return m.trust(dompurify.sanitize(description));
-    if (displayMode === "unsafe html") return m.trust(description);
+    if (displayMode === "very unsafe html") return m.trust(description);
     if (displayMode !== "text") console.log("unexpected displayMode:", displayMode);
     return description;
 }

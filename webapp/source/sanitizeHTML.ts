@@ -7,7 +7,7 @@
 
 // 1 is normal tag that needs to be closed; 2 is self-closing tag (br and hr)
 var allowedHTMLTags = {
-    a: 1,
+    // a: 1,
     address: 1,
     article: 1,
     b: 1,
@@ -78,7 +78,10 @@ function generateVDOM(nodes: NodeList, configuration) {
                 var tagName = node.tagName.toLowerCase();
                 
                 // console.log("element", node);
-                if (!allowedHTMLTags[tagName] && (tagName === "img" && !configuration.allowImages)) {
+                if (!allowedHTMLTags[tagName] ||
+                    (tagName === "a" && !configuration.allowLinks) ||
+                    (tagName === "img" && !configuration.allowImages)
+                ) {
                     console.log("disallowed tag", tagName);
                     tagName = "span";
                 }
@@ -95,7 +98,7 @@ function generateVDOM(nodes: NodeList, configuration) {
                             console.log("WARN: CSS class not allowed", theClassOrClasses);
                         }
                     }
-                    if (attribute.name === "href") {
+                    if (configuration.allowLinks && attribute.name === "href") {
                         var url = attribute.value;
                         if (url && url.substring(0, 2) === "//") {
                             url = window.location.protocol + url;
@@ -104,7 +107,7 @@ function generateVDOM(nodes: NodeList, configuration) {
                             attributes["href"] = url;
                         }
                     }
-                    if (attribute.name === "src") {
+                    if (configuration.allowImages && attribute.name === "src") {
                         var url = attribute.value;
                         if (url && url.substring(0, 2) === "//") {
                             url = window.location.protocol + url;
@@ -113,7 +116,7 @@ function generateVDOM(nodes: NodeList, configuration) {
                             attributes["src"] = url;
                         }
                     }
-                    if (attribute.name === "width" || attribute.name === "height") {
+                    if (configuration.allowImages && (attribute.name === "width" || attribute.name === "height")) {
                         var size = parseInt(attribute.value);
                         if (size !== NaN && size > 1) {
                             attributes[attribute.name] = size;
@@ -157,12 +160,12 @@ function generateVDOM(nodes: NodeList, configuration) {
     return result;
 }
 
-export function generateSanitizedHTMLForMithril(mithril, DOMParser, html, configuration = {}) {
+export function generateSanitizedHTMLForMithrilWithAttributes(mithril, DOMParser, html, configuration = {}) {
     m = mithril;
     // console.log("generateSanitized html", html);
 
     if (html === undefined || html === null) {
-        console.log("generateSanitizedHTMLForMithril: Undefined or null html", html);
+        console.log("generateSanitizedHTMLForMithrilWithAttributes: Undefined or null html", html);
         html = "";
         // throw new Error("Undefined or null html");
     }
@@ -180,100 +183,116 @@ export function generateSanitizedHTMLForMithril(mithril, DOMParser, html, config
     
     var vdom = generateVDOM(htmlDoc.childNodes, configuration);
     
-    // console.log("generateSanitizedHTML vdom", vdom);
+    // console.log("generateSanitizedHTMLForMithrilWithAttributes vdom", vdom);
     
     return vdom;
-    
-    /*
-    
+}
 
+export function generateSanitizedHTMLForMithrilWithoutAttributes(mithril, html) {
+    m = mithril;
+    // console.log("html", html);
     
-    // Use a fake div tag as a conceptual placeholder
-    var tags = [{tagName: "div", cssClass: undefined}];
-    var output = [[]];
-    var text = ""; 
+    if (html === undefined || html === null) {
+        console.log("Undefined or null html", html);
+        html = "";
+        // throw new Error("Undefined or null html");
+    }
     
-    for (var i = 0, l = html.length; i < l; i++) {
-        var c = html.charAt(i);
-
-        if (c === "<") {
-            if (text !== "") {
-                output[output.length - 1].push(text);
-                text = "";
-            }
-            
-            var closing = html.charAt(i + 1) === "/";
-            if (closing) i++;
-            
-            var pos = html.indexOf(">", i + 1);
-            if (pos < 0) {
-                throw new Error("no closing angle bracket found after position: " + i);
-            }
-            var tagName = html.substring(i + 1, pos);
-            i = pos;
-            
-            // console.log("tagName", tagName);
-            
-            var cssClass;
-            var parts = tagName.split(".");
-            if (parts.length > 1) {
-                tagName = parts[0];
-                cssClass = parts[1];
-            } else {
-                cssClass = undefined;
-            }
-            
-            if (/[^A-Za-z0-9]/.test(tagName)) {
-                throw new Error("tag is not alphanumeric: " + tagName);
-            }
-            
-            if (cssClass && !allowedCSSClasses[cssClass]) {
-                throw new Error("css class is not allowed: " + cssClass);
-            }
-            
-            if (closing) {
-                var startTag = tags.pop();
-                if (startTag.tagName !== tagName) {
-                    throw new Error("closing tag does not match opening tag for: " + tagName);
+    // Handle case where is already a Mithril object
+    if (html.tag) return html;
+    
+    var hasMarkup = html.indexOf("<") !== -1;
+    // console.log("has markup", hasMarkup);
+    if (!hasMarkup) return html;
+    
+    try {
+        // Use a fake div tag as a conceptual placeholder
+        var tags = [{tagName: "div", cssClass: undefined}];
+        var output = [[]];
+        var text = ""; 
+        
+        for (var i = 0, l = html.length; i < l; i++) {
+            var c = html.charAt(i);
+    
+            if (c === "<") {
+                if (text !== "") {
+                    output[output.length - 1].push(text);
+                    text = "";
                 }
-                cssClass = startTag.cssClass;
-            }
-            
-            if (!allowedHTMLTags[tagName]) {
-                throw new Error("tag is not allowed: " + tagName);
-            }
-            
-            if (allowedHTMLTags[tagName] === 2) {
-                // self-closing tag like BR
-                output.push([]);
-                closing = true;
-            }
-            
-            if (closing) {
-                var newTag;
-                if (cssClass) {
-                    newTag = m(tagName, {"class": cssClass}, output.pop());
+                
+                var closing = html.charAt(i + 1) === "/";
+                if (closing) i++;
+                
+                var pos = html.indexOf(">", i + 1);
+                if (pos < 0) {
+                    throw new Error("no closing angle bracket found after position: " + i);
+                }
+                var tagName = html.substring(i + 1, pos);
+                i = pos;
+                
+                // console.log("tagName", tagName);
+                
+                var cssClass;
+                var parts = tagName.split(".");
+                if (parts.length > 1) {
+                    tagName = parts[0];
+                    cssClass = parts[1];
                 } else {
-                    newTag = m(tagName, output.pop());
+                    cssClass = undefined;
                 }
-                output[output.length - 1].push(newTag);
+                
+                if (/[^A-Za-z0-9]/.test(tagName)) {
+                    throw new Error("tag is not alphanumeric or has attributes: " + tagName);
+                }
+                
+                if (cssClass && !allowedCSSClasses[cssClass]) {
+                    throw new Error("css class is not allowed: " + cssClass);
+                }
+                
+                if (closing) {
+                    var startTag = tags.pop();
+                    if (startTag.tagName !== tagName) {
+                        throw new Error("closing tag does not match opening tag for: " + tagName);
+                    }
+                    cssClass = startTag.cssClass;
+                }
+                
+                if (!allowedHTMLTags[tagName]) {
+                    throw new Error("tag is not allowed: " + tagName);
+                }
+                
+                if (allowedHTMLTags[tagName] === 2) {
+                    // self-closing tag like BR
+                    output.push([]);
+                    closing = true;
+                }
+                
+                if (closing) {
+                    var newTag;
+                    if (cssClass) {
+                        newTag = m(tagName, {"class": cssClass}, output.pop());
+                    } else {
+                        newTag = m(tagName, output.pop());
+                    }
+                    output[output.length - 1].push(newTag);
+                } else {
+                    tags.push({tagName: tagName, cssClass: cssClass});
+                    output.push([]);
+                }
             } else {
-                tags.push({tagName: tagName, cssClass: cssClass});
-                output.push([]);
+                text = text + c;
             }
-        } else {
-            text = text + c;
         }
+        
+        if (text) output[output.length - 1].push(text);
+        
+        if (tags.length !== 1 || output.length !== 1) {
+            throw new Error("Unmatched start tag: " + tags.pop());
+        }
+        
+        // Don't return the fake div tag, just the contents
+        return output.pop();
+    } catch (exception) {
+        return [m("div", "Strict sanitization issue: " + exception)]; 
     }
-    
-    if (text) output[output.length - 1].push(text);
-    
-    if (tags.length !== 1 || output.length !== 1) {
-        throw new Error("Unmatched start tag: " + tags.pop());
-    }
-    
-    // Don't return the fake div tag, just the contents
-    return output.pop(); 
-    
-    */
 }
