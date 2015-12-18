@@ -12,12 +12,17 @@ describe("sanitizeHTML strict test", function() {
         expect(result).to.deep.equal([ { tag: 'div', attrs: {}, children: [ 'hello' ] } ]);
     });
     
-    it("fails on an image", function() {
+    it("uses span for an image", function() {
         var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(mithril, '<img src="trouble"></img>');
         console.log("result", JSON.stringify(result));
-        expect(result).to.deep.equal([{"tag":"div","attrs":{},"children":["Strict sanitization issue: Error: tag is not alphanumeric: img src=\"trouble\""]}]);
+        expect(result).to.deep.equal([{"tag":"span","attrs":{},"children":[]}]);
     });
  
+    it("handles closed image", function() {
+        var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(mithril, '<img />');
+        console.log("result", JSON.stringify(result));
+        expect(result).to.deep.equal([{"tag":"span","attrs":{},"children":[]}]);
+    });
 });
     
 describe("sanitizeHTML with parameters test", function() {

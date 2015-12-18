@@ -78,9 +78,9 @@ function generateVDOM(nodes: NodeList, configuration) {
                 var tagName = node.tagName.toLowerCase();
                 
                 // console.log("element", node);
-                if (!allowedHTMLTags[tagName] ||
-                    (tagName === "a" && !configuration.allowLinks) ||
-                    (tagName === "img" && !configuration.allowImages)
+                if (!allowedHTMLTags[tagName] &&
+                    ((tagName === "a" && !configuration.allowLinks) ||
+                    (tagName === "img" && !configuration.allowImages))
                 ) {
                     console.log("disallowed tag", tagName);
                     tagName = "span";
@@ -212,6 +212,7 @@ export function generateSanitizedHTMLForMithrilWithoutAttributes(mithril, html) 
         var text = ""; 
         
         for (var i = 0, l = html.length; i < l; i++) {
+            var tagDisallowed = false;
             var c = html.charAt(i);
     
             if (c === "<") {
@@ -223,15 +224,22 @@ export function generateSanitizedHTMLForMithrilWithoutAttributes(mithril, html) 
                 var closing = html.charAt(i + 1) === "/";
                 if (closing) i++;
                 
+                // Simple approach will cause parse errors ">" in parameter strings, but OK
                 var pos = html.indexOf(">", i + 1);
                 if (pos < 0) {
                     throw new Error("no closing angle bracket found after position: " + i);
                 }
-                var tagName = html.substring(i + 1, pos);
+                var tagEnd = pos;
+                var spacePos = html.indexOf(" ", i + 1);
+                if (spacePos > -1 && spacePos < pos) tagEnd = spacePos;
+                var tagName = html.substring(i + 1, tagEnd);
                 i = pos;
                 
-                // console.log("tagName", tagName);
+                var closedTag = html.substring(pos - 1, pos) === "/";
                 
+                console.log("tagName", tagName, closedTag);
+                
+                // Special support for Mithril-like class names inline with tags
                 var cssClass;
                 var parts = tagName.split(".");
                 if (parts.length > 1) {
@@ -258,7 +266,9 @@ export function generateSanitizedHTMLForMithrilWithoutAttributes(mithril, html) 
                 }
                 
                 if (!allowedHTMLTags[tagName]) {
-                    throw new Error("tag is not allowed: " + tagName);
+                    // throw new Error("tag is not allowed: " + tagName);
+                    tagDisallowed = true;
+                    // tagName = "span";
                 }
                 
                 if (allowedHTMLTags[tagName] === 2) {
@@ -267,8 +277,11 @@ export function generateSanitizedHTMLForMithrilWithoutAttributes(mithril, html) 
                     closing = true;
                 }
                 
-                if (closing) {
+                if (closedTag) output.push([]);
+                
+                if (closing || closedTag) {
                     var newTag;
+                    if (tagDisallowed) tagName = "span";
                     if (cssClass) {
                         newTag = m(tagName, {"class": cssClass}, output.pop());
                     } else {
@@ -287,7 +300,8 @@ export function generateSanitizedHTMLForMithrilWithoutAttributes(mithril, html) 
         if (text) output[output.length - 1].push(text);
         
         if (tags.length !== 1 || output.length !== 1) {
-            throw new Error("Unmatched start tag: " + tags.pop());
+            var unmatched = tags.pop();
+            throw new Error("Unmatched start tag: " + unmatched.tagName);
         }
         
         // Don't return the fake div tag, just the contents
