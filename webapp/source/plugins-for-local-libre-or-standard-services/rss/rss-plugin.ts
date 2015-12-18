@@ -2,6 +2,7 @@
 
 import m = require("mithril");
 import sanitizeHTML = require("../../sanitizeHTML");
+import dompurify = require("dompurify");
 
 // import exampleRSS = require("./rssFeedExampleFromFSF");
 
@@ -152,7 +153,7 @@ function displayModeChange(newMode) {
 }
 
 function displayModeChooser() {
-    var result: any = ["source", "text", "sanitized", "images", "unsafe html"].map((mode) => {
+    var result: any = ["source", "text", "sanitized", "images", "dompurify", "unsafe html"].map((mode) => {
         var selected = (displayMode === mode) ? "*" : "";
         return [ m("button", {onclick: displayModeChange.bind(null, mode)}, selected + mode + selected)];
     });
@@ -161,8 +162,10 @@ function displayModeChooser() {
 }
 
 function displayDescription(description) {
+    // "source" option is handled elsewhere
     if (displayMode === "sanitized") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description);
     if (displayMode === "images") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description, {allowImages: true});
+    if (displayMode === "dompurify") return m.trust(dompurify.sanitize(description));
     if (displayMode === "unsafe html") return m.trust(description);
     if (displayMode !== "text") console.log("unexpected displayMode:", displayMode);
     return description;
