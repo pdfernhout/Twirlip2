@@ -122,7 +122,7 @@ function generateVDOM(nodes: NodeList, configuration) {
                             attributes[attribute.name] = size;
                         } else {
                             // Tracking image
-                            console.log("tracking image");
+                            console.log("discarding likely tracking image");
                             tagName = "span";
                             attributes = {};
                             break;
@@ -136,7 +136,7 @@ function generateVDOM(nodes: NodeList, configuration) {
                 
                 if (tagName === "img") {
                     if (!attributes["width"] || !attributes["height"]) {
-                        console.log("maybe tracking image", attributes["src"]);
+                        console.log("discarding likely tracking image (2)", attributes["src"]);
                         tagName = "span";
                         attributes = {};
                     }
