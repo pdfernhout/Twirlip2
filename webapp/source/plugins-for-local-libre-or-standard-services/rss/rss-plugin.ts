@@ -4,13 +4,33 @@ import m = require("mithril");
 
 import exampleRSS = require("./rssFeedExampleFromFSF");
 
-var testURL = "http://static.fsf.org/fsforg/rss/news.xml";
-// var testURL = "http://portland.craigslist.org/sof/index.rss";
+var sampleFeeds = [
+    "http://static.fsf.org/fsforg/rss/news.xml",
+    "http://portland.craigslist.org/sof/index.rss",
+    "http://rss.cnn.com/rss/cnn_topstories.rss",
+    "http://ma.tt/feed",
+    "http://edinburghistoricalsociety.org/feed",
+    "http://www.drfuhrman.com/rss/whatshappening.feed",
+    "http://www.naturalnews.com/rss.xml",
+    "http://scienceblogs.com/channel/life-science/feed/",
+    "http://www.healthboards.com/boards/blogs/feed.rss",
+    "http://www.freerepublic.com/tag/*/feed.rss",
+    "http://www.democraticunderground.com/?com=rss&forum=latest",
+    "http://gp.org/press/feed/sql2rss.php",
+    "https://www.whitehouse.gov/feed/press",
+    "http://www.nasa.gov/rss/dyn/breaking_news.rss",
+    "https://soylentnews.org/index.rss"
+];
+
+var testURL = sampleFeeds[0];
 
 var rssFeedInstance = {items: []};
-var fetchResult = { status: "pending" };
+var fetchResult = { status: "idle" };
+var currentURL = "";
 
 function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCallback) {
+    fetchResult = { status: "pending" };
+    
     var httpRequest = new XMLHttpRequest();
 
     httpRequest.onreadystatechange = function() {
@@ -93,17 +113,25 @@ export function initialize() {
     console.log("exampleRSS", exampleRSS);
     // testData = parseRSS(exampleRSS.content);
     
-    apiRequestSend("/api/proxy", { url: testURL }, 10000, (result) => {
+    newURL(testURL);
+    
+    console.log("RSS plugin initialized");
+}
+
+function newURL(url) {
+    console.log("newURL", url);
+    currentURL = url;
+    // TODO: m.request({method: "POST", url: "/api/proxy"}).then( ...
+    apiRequestSend("/api/proxy", { url: url }, 10000, (result) => {
         fetchResult = { status: "OK" };
         rssFeedInstance = parseRSS(result.content);
         console.log("proxy request success", result);
         m.redraw();
     }, (failed) => {
         console.log("proxy request failed", failed);
-        fetchResult = { status: "pending" };
+        fetchResult = { status: "failed" };
         m.redraw();
     });
-    console.log("RSS plugin initialized");
 }
 
 function displayItem(item) {
@@ -125,6 +153,9 @@ function displayItem(item) {
 
 function displayRSS() {
     return m("div.feed", [
+        "URL:",
+        m("input", {onchange: m.withAttr("value", newURL), value: currentURL, size: "80"}),
+        m("br"),
         JSON.stringify(fetchResult),
         m("br"),
         rssFeedInstance.items.map(displayItem)
@@ -134,8 +165,10 @@ function displayRSS() {
 export function display() {
     return m("div.rssPlugin", [
         m("hr"),
-        m("strong", "RSS feed reader plugin"),
-        //m("pre", JSON.stringify(testData, null, 2))
+        m("strong", "RSS feed reader plugin"), m("br"),
+        "Examples:", m("br"),
+        sampleFeeds.map((url) => [ m("button", {onclick: newURL.bind(null, url)}, "V"), " ", url, m("br")]),
+        m("br"),
         displayRSS()
     ]);
 }
