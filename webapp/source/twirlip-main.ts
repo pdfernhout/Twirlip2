@@ -16,7 +16,7 @@ var PageDisplayer: any = {
     view: function(controller, args) {
         // console.log("========== view called in PageDisplayer ==========");
         
-        return m("div.pageContents", { key: "pageContents" }, [
+        return m("div.pageContents", [
             "Hello world from Twirlip",
             m("hr"),
             "ThunderbirdS Are Grow!",

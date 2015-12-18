@@ -1,7 +1,13 @@
+"use strict";
+
 import m = require("mithril");
 
-import testData = require("./rssFeedExampleFromFSF");
+import exampleRSS = require("./rssFeedExampleFromFSF");
 
+var testURL = "http://static.fsf.org/fsforg/rss/news.xml";
+// var testURL = "http://portland.craigslist.org/sof/index.rss";
+
+var testData;
 var fetchResult = { status: "pending" };
 
 function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCallback) {
@@ -44,11 +50,34 @@ function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCa
     httpRequest.send(data);
 }
 
-var testURL = "http://static.fsf.org/fsforg/rss/news.xml";
+declare var marknote: any;
+
+function parseRSS(xmlText) {
+    var parser = new DOMParser();
+    
+    console.log("about to try to parse XML");
+    try {
+        //xmlText = "<root><fruit color='red'></fruit></root>";
+        // Produces Syntax Error with FSF example -- but W3C XML validator thinks it's OK XML 
+        var xmlDoc = parser.parseFromString(xmlText, "text/xml");
+        //var xmlDoc = "foo";
+        console.log("xmlDoc", xmlDoc);
+    } catch (error) {
+        console.log("error parsing xml", error);
+    }
+    
+    return {
+        items: []
+    };
+}
 
 export function initialize() {
-    console.log("test data:", testData);
+    // console.log("test data:", testData);
 
+    console.log("exampleRSS", exampleRSS);
+    testData = parseRSS(exampleRSS.content);
+    
+    /*
     apiRequestSend("/api/proxy", { url: testURL }, 10000, (result) => {
         fetchResult = result;
         console.log("proxy request success", result);
@@ -58,6 +87,7 @@ export function initialize() {
         fetchResult = { status: "pending" };
         m.redraw();
     });
+    */
     console.log("RSS plugin initialized");
 }
 
