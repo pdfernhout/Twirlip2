@@ -7,7 +7,7 @@
 
 // 1 is normal tag that needs to be closed; 2 is self-closing tag (br and hr)
 var allowedHTMLTags = {
-    // a
+    a: 1,
     address: 1,
     article: 1,
     b: 1,
@@ -58,6 +58,11 @@ var allowedCSSClasses = {
 
 var m;
 
+function isURLAcceptable(url) {
+    if (!url) return false;
+    return url.substring(0, 5) === "http:" || url.substring(0, 6) === "https";
+}
+
 function generateVDOM(nodes: NodeList) {
     if (!nodes) return [];
     // console.log("generateVDOM nodes length", nodes.length);
@@ -71,9 +76,9 @@ function generateVDOM(nodes: NodeList) {
         switch (node.nodeType) {
             case 1:
                 // console.log("element", node);
-                if (!allowedHTMLTags[tagName]) {
+                if (!allowedHTMLTags[tagName.toLowerCase()]) {
                     console.log("disallowed tag", tagName);
-                    tagName = "div";
+                    tagName = "span";
                 }
                 
                 // TODO: Allow more attributes maybe
@@ -88,6 +93,19 @@ function generateVDOM(nodes: NodeList) {
                             console.log("WARN: css class not allowed", theClassOrClasses);
                         }
                     }
+                    if (attribute.name === "href") {
+                        var url = attribute.value;
+                        if (url && url.substring(0, 2) === "//") {
+                            url = window.location.protocol + url;
+                        }
+                        if (isURLAcceptable(url)) {
+                            attributes["href"] = url;
+                        }
+                    }
+                }
+                
+                if (tagName.toLowerCase() === "a") {
+                    attributes["rel"] = "nofollow";
                 }
                 
                 var children = generateVDOM(node.childNodes)
