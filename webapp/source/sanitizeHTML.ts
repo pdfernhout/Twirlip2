@@ -63,7 +63,7 @@ function isURLAcceptable(url) {
     return url.substring(0, 5) === "http:" || url.substring(0, 6) === "https";
 }
 
-function generateVDOM(nodes: NodeList) {
+function generateVDOM(nodes: NodeList, configuration) {
     if (!nodes) return [];
     // console.log("generateVDOM nodes length", nodes.length);
   
@@ -72,11 +72,13 @@ function generateVDOM(nodes: NodeList) {
     for (var i = 0; i < nodes.length; i++) {
         var node = <HTMLElement>nodes[i];
         // console.log("nodeType", node.nodeType);
-        var tagName = node.tagName;
+
         switch (node.nodeType) {
             case 1:
+                var tagName = node.tagName.toLowerCase();
+                
                 // console.log("element", node);
-                if (!allowedHTMLTags[tagName.toLowerCase()]) {
+                if (!allowedHTMLTags[tagName] && (tagName === "img" && !configuration.allowImages)) {
                     console.log("disallowed tag", tagName);
                     tagName = "span";
                 }
@@ -90,7 +92,7 @@ function generateVDOM(nodes: NodeList) {
                         if (theClassOrClasses in allowedCSSClasses) {
                             attributes["class"] = theClassOrClasses;
                         } else {
-                            console.log("WARN: css class not allowed", theClassOrClasses);
+                            console.log("WARN: CSS class not allowed", theClassOrClasses);
                         }
                     }
                     if (attribute.name === "href") {
@@ -102,13 +104,34 @@ function generateVDOM(nodes: NodeList) {
                             attributes["href"] = url;
                         }
                     }
+                    if (attribute.name === "src") {
+                        var url = attribute.value;
+                        if (url && url.substring(0, 2) === "//") {
+                            url = window.location.protocol + url;
+                        }
+                        if (isURLAcceptable(url)) {
+                            attributes["src"] = url;
+                        }
+                    }
+                    if (attribute.name === "width" || attribute.name === "height") {
+                        var size = parseInt(attribute.value);
+                        if (size !== NaN && size > 1) {
+                            attributes[attribute.name] = size;
+                        } else {
+                            // Tracking image
+                            console.log("tracking image");
+                            tagName = "span";
+                            attributes = {};
+                            break;
+                        }
+                    }                    
                 }
                 
-                if (tagName.toLowerCase() === "a") {
+                if (tagName === "a") {
                     attributes["rel"] = "nofollow";
                 }
                 
-                var children = generateVDOM(node.childNodes)
+                var children = generateVDOM(node.childNodes, configuration)
                 var vdom = m(tagName, attributes, children);
                 result.push(vdom);
                 break;
@@ -126,10 +149,10 @@ function generateVDOM(nodes: NodeList) {
     return result;
 }
 
-export function generateSanitizedHTMLForMithril(mithril, DOMParser, html) {
+export function generateSanitizedHTMLForMithril(mithril, DOMParser, html, configuration = {}) {
     m = mithril;
     // console.log("generateSanitized html", html);
-    
+
     if (html === undefined || html === null) {
         console.log("generateSanitizedHTMLForMithril: Undefined or null html", html);
         html = "";
@@ -147,7 +170,7 @@ export function generateSanitizedHTMLForMithril(mithril, DOMParser, html) {
     
     // console.log("htmlDoc", htmlDoc);
     
-    var vdom = generateVDOM(htmlDoc.childNodes);
+    var vdom = generateVDOM(htmlDoc.childNodes, configuration);
     
     // console.log("generateSanitizedHTML vdom", vdom);
     

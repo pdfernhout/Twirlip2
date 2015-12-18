@@ -88,6 +88,7 @@ function parseRSS(xmlText) {
         // console.log("xmlDoc", xmlDoc);
     } catch (error) {
         console.log("error parsing xml", error);
+        return { items: [] };
     }
     
     var itemNodes = xmlDoc.getElementsByTagName("item");
@@ -144,7 +145,7 @@ function displayModeChange(newMode) {
 }
 
 function displayModeChooser() {
-    var result: any = ["text", "sanitize", "html"].map((mode) => {
+    var result: any = ["text", "sanitize", "images", "unsafe html"].map((mode) => {
         var selected = (displayMode === mode) ? "*" : "";
         return [ m("button", {onclick: displayModeChange.bind(null, mode)}, selected + mode + selected)];
     });
@@ -154,8 +155,8 @@ function displayModeChooser() {
 
 function displayDescription(description) {
     if (displayMode === "sanitize") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description);
-    // if (displayMode === "images") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description);
-    if (displayMode === "html") return m.trust(description);
+    if (displayMode === "images") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description, {allowImages: true});
+    if (displayMode === "unsafe html") return m.trust(description);
     if (displayMode !== "text") console.log("unexpected displayMode:", displayMode);
     return description;
 }
