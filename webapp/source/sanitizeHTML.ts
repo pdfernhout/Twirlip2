@@ -131,6 +131,14 @@ function generateVDOM(nodes: NodeList, configuration) {
                     attributes["rel"] = "nofollow";
                 }
                 
+                if (tagName === "img") {
+                    if (!attributes["width"] || !attributes["height"]) {
+                        console.log("maybe tracking image", attributes["src"]);
+                        tagName = "span";
+                        attributes = {};
+                    }
+                }
+                
                 var children = generateVDOM(node.childNodes, configuration)
                 var vdom = m(tagName, attributes, children);
                 result.push(vdom);
