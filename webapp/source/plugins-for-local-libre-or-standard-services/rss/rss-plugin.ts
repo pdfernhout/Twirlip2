@@ -1,8 +1,9 @@
 "use strict";
 
 import m = require("mithril");
+import sanitizeHTML = require("../../sanitizeHTML");
 
-import exampleRSS = require("./rssFeedExampleFromFSF");
+// import exampleRSS = require("./rssFeedExampleFromFSF");
 
 var sampleFeeds = [
     "http://static.fsf.org/fsforg/rss/news.xml",
@@ -27,6 +28,7 @@ var testURL = sampleFeeds[0];
 var rssFeedInstance = {items: []};
 var fetchResult = { status: "idle" };
 var currentURL = "";
+var displayMode = "sanitize";
 
 function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCallback) {
     fetchResult = { status: "pending" };
@@ -72,7 +74,7 @@ function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCa
 
 function getField(node: Element, fieldName, defaultValue) {
     var nodes = node.getElementsByTagName(fieldName);
-    console.log("nodes", fieldName, nodes);
+    // console.log("nodes", fieldName, nodes);
     if (nodes && nodes.length && nodes[0].childNodes.length) return nodes[0].childNodes[0].nodeValue;
     return defaultValue;
 }
@@ -80,10 +82,10 @@ function getField(node: Element, fieldName, defaultValue) {
 function parseRSS(xmlText) {
     var parser = new DOMParser();
     
-    console.log("about to try to parse XML");
+    // console.log("about to try to parse XML");
     try {
         var xmlDoc = parser.parseFromString(xmlText, "text/xml");
-        console.log("xmlDoc", xmlDoc);
+        // console.log("xmlDoc", xmlDoc);
     } catch (error) {
         console.log("error parsing xml", error);
     }
@@ -110,10 +112,10 @@ function parseRSS(xmlText) {
 export function initialize() {
     // console.log("test data:", testData);
 
-    console.log("exampleRSS", exampleRSS);
+    // console.log("exampleRSS", exampleRSS);
     // testData = parseRSS(exampleRSS.content);
     
-    newURL(testURL);
+    // newURL(testURL);
     
     console.log("RSS plugin initialized");
 }
@@ -121,6 +123,8 @@ export function initialize() {
 function newURL(url) {
     console.log("newURL", url);
     currentURL = url;
+    rssFeedInstance = {items: []};
+    if (displayMode === "html") displayMode = "sanitize";
     // TODO: m.request({method: "POST", url: "/api/proxy"}).then( ...
     apiRequestSend("/api/proxy", { url: url }, 10000, (result) => {
         fetchResult = { status: "OK" };
@@ -134,6 +138,28 @@ function newURL(url) {
     });
 }
 
+function displayModeChange(newMode) {
+    console.log("displayModeChange", newMode);
+    displayMode = newMode;
+}
+
+function displayModeChooser() {
+    var result: any = ["text", "sanitize", "html"].map((mode) => {
+        var selected = (displayMode === mode) ? "*" : "";
+        return [ m("button", {onclick: displayModeChange.bind(null, mode)}, selected + mode + selected)];
+    });
+    result.push(m("br"));
+    return result;
+}
+
+function displayDescription(description) {
+    if (displayMode === "sanitize") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description);
+    // if (displayMode === "images") return sanitizeHTML.generateSanitizedHTMLForMithril(m, DOMParser, description);
+    if (displayMode === "html") return m.trust(description);
+    if (displayMode !== "text") console.log("unexpected displayMode:", displayMode);
+    return description;
+}
+
 function displayItem(item) {
     var title = item.title;
     var link = item.link;
@@ -143,8 +169,9 @@ function displayItem(item) {
     return m("div.item", [
         m("br"),
         m("strong", title),
+        " ", timestamp,
         m("br"),
-        description,
+        displayDescription(description),
         " ",
         m("a", { href: link }, "More ..."),
         m("br")
@@ -169,6 +196,7 @@ export function display() {
         "Examples:", m("br"),
         sampleFeeds.map((url) => [ m("button", {onclick: newURL.bind(null, url)}, "V"), " ", url, m("br")]),
         m("br"),
+        displayModeChooser(),
         displayRSS()
     ]);
 }
