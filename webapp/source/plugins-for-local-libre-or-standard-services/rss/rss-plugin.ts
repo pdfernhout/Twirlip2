@@ -50,24 +50,40 @@ function apiRequestSend(apiURL, apiRequest, timeout_ms, successCallback, errorCa
     httpRequest.send(data);
 }
 
-declare var marknote: any;
+function getField(node: Element, fieldName, defaultValue) {
+    var nodes = node.getElementsByTagName(fieldName);
+    console.log("nodes", fieldName, nodes);
+    if (nodes && nodes.length && nodes[0].childNodes.length) return nodes[0].childNodes[0].nodeValue;
+    return defaultValue;
+}
 
 function parseRSS(xmlText) {
     var parser = new DOMParser();
     
     console.log("about to try to parse XML");
     try {
-        //xmlText = "<root><fruit color='red'></fruit></root>";
-        // Produces Syntax Error with FSF example -- but W3C XML validator thinks it's OK XML 
         var xmlDoc = parser.parseFromString(xmlText, "text/xml");
-        //var xmlDoc = "foo";
         console.log("xmlDoc", xmlDoc);
     } catch (error) {
         console.log("error parsing xml", error);
     }
     
+    var itemNodes = xmlDoc.getElementsByTagName("item");
+    
+    var items = [];
+    
+    for (var i = 0; i < itemNodes.length; i++) {
+        var itemNode = itemNodes[i];
+        items.push({
+            title: getField(itemNode, "title", ""),
+            description: getField(itemNode, "description", ""),
+            link: getField(itemNode, "link", ""),
+            date: getField(itemNode, "date", "")
+        });
+    }
+    
     return {
-        items: []
+        items: items
     };
 }
 
@@ -94,7 +110,7 @@ export function initialize() {
 function displayItem(item) {
     var title = item.title;
     var link = item.link;
-    var description = item.desc;
+    var description = item.description;
     var timestamp = item.date;
 
     return m("div.item", [
