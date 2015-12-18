@@ -56,11 +56,64 @@ var allowedCSSClasses = {
     "narrafirma-special-warning": 1
 };
 
-export function generateSanitizedHTMLForMithril(m, html) {
-    // console.log("html", html);
+var m;
+
+function generateVDOM(nodes: NodeList) {
+    if (!nodes) return [];
+    // console.log("generateVDOM nodes length", nodes.length);
+  
+    var result = [];
+    
+    for (var i = 0; i < nodes.length; i++) {
+        var node = <HTMLElement>nodes[i];
+        // console.log("nodeType", node.nodeType);
+        var tagName = node.tagName;
+        switch (node.nodeType) {
+            case 1:
+                // console.log("element", node);
+                if (!allowedHTMLTags[tagName]) {
+                    console.log("disallowed tag", tagName);
+                    tagName = "div";
+                }
+                
+                // TODO: Allow more attributes maybe
+                var attributes = {};
+                for (var j = 0; j < node.attributes.length; j++) {
+                    var attribute = node.attributes[j];
+                    if (attribute.name === "class") {
+                        var theClassOrClasses = attribute.value;
+                        if (theClassOrClasses in allowedCSSClasses) {
+                            attributes["class"] = theClassOrClasses;
+                        } else {
+                            console.log("WARN: css class not allowed", theClassOrClasses);
+                        }
+                    }
+                }
+                
+                var children = generateVDOM(node.childNodes)
+                var vdom = m(tagName, attributes, children);
+                result.push(vdom);
+                break;
+            case 3:
+                if ((<any>node).data) {
+                    // console.log("adding text node", node.data);
+                    result.push((<any>node).data);
+                }
+                break;
+            default:
+                console.log("WARN: Unhandled node type", node.nodeType, node);
+        }
+    }
+    
+    return result;
+}
+
+export function generateSanitizedHTMLForMithril(mithril, DOMParser, html) {
+    m = mithril;
+    // console.log("generateSanitized html", html);
     
     if (html === undefined || html === null) {
-        console.log("Undefined or null html", html);
+        console.log("generateSanitizedHTMLForMithril: Undefined or null html", html);
         html = "";
         // throw new Error("Undefined or null html");
     }
@@ -71,6 +124,20 @@ export function generateSanitizedHTMLForMithril(m, html) {
     var hasMarkup = html.indexOf("<") !== -1;
     // console.log("has markup", hasMarkup);
     if (!hasMarkup) return html;
+    
+    var htmlDoc = new DOMParser().parseFromString(html, 'text/html');
+    
+    // console.log("htmlDoc", htmlDoc);
+    
+    var vdom = generateVDOM(htmlDoc.childNodes);
+    
+    // console.log("generateSanitizedHTML vdom", vdom);
+    
+    return vdom;
+    
+    /*
+    
+
     
     // Use a fake div tag as a conceptual placeholder
     var tags = [{tagName: "div", cssClass: undefined}];
@@ -158,4 +225,6 @@ export function generateSanitizedHTMLForMithril(m, html) {
     
     // Don't return the fake div tag, just the contents
     return output.pop(); 
+    
+    */
 }
