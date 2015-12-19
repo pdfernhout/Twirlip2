@@ -142,3 +142,21 @@ https://mail.mozilla.org/pipermail/tb-planning/2015-December/004308.html
 * My own comment on that Slashot article is here:  
 "Sprint for Thunderbird webapp proof-of-concept (Score:2)"  
 http://it.slashdot.org/comments.pl?sid=8496187&cid=51149659
+
+* Linagora (a Thunderbird supporter) has been doing innovative stuff in open source.
+In a way, they are perhaps the French equivalent to the German/Swiss Kolab -- but even bigger?
+Taking a quick peak at code like for
+their LearnPAd project, it seems to be in Java, but they may use a variety of languages.
+I have not looked in detail to figure out their storage architectures and GUI choices so on
+for various projects they have.
+Because of their open source ethic and emphasis on supporting collaborating communities,
+Linagora Labs seems like it would be a great place to work on these sorts of message/information integration issues
+(including perhaps in relation to their OBM, LinShare and OpenPaas products,
+perhaps running on OpenCloudware or linked to LearnPAd somehow).
+However, that might be more feasible if I had studied French instead of (or along with) German in school. :-)
+By comparison, when I look at jobs at, say, Xerox PARC, 
+they talk about much the same thing of supporting collaboration but do not mention "open source".
+One reason Xerox PARC's great Smalltalk language lost mindshare in the 1990s
+was because it was proprietary compared to stuff like Python or C++ (or a free-as-in-beer-then Java). 
+http://www.linagora.com/linagora-labs
+http://www.learnpad.eu/

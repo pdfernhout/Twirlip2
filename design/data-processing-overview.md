@@ -37,6 +37,11 @@ As Kyle Wilson wrote in [Software Is Hard](http://gamearchitect.net/Articles/Sof
 And of course, there is the original "ThunderbirdS Are Grow!" manifesto about this project specifically:    
 http://www.pdfernhout.net/thunderbirds-are-grow-manifesto.html
 
+See also by R. Kent James:  
+https://mail.mozilla.org/pipermail/tb-planning/2015-September/004066.html  
+http://mesquilla.com/2009/01/27/information-fragmentation-its-the-enemy/  
+http://mesquilla.com/2010/07/15/thunderbirds-strategic-dilemma/  
+
 ## How data gets transformed as it moves through Twirlip
 
 A single Twirlip installation is intended to handle information at a personal,
