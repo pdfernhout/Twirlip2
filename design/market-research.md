@@ -94,16 +94,24 @@ research:
 http://alternativeto.net/software/kolab/  
 http://alternativeto.net/software/mozilla-thunderbird/  
 
-* Also I should have mentioned Nylas, as open source webmail.
+* Also I should have mentioned Nylas, as open source webmail with N1.
 As with Automattic, presumably the company's business model is paid hosting?
 So, as with Kolab, they too might become the next Automattic. 
-Server is in Python, client in JavaScript with React.
+Server is in Python, client in JavaScript/CoffeeScript with React (and cjsx CoffeeScript/React templating).
 They use their own "sync-engine" (in Python) for storage which I think uses MySQL as the backend?
 The encourage plugins and have examples.
 However, they chose Slack for company communications, which perhaps tells me something about their ambitions.
 All very realistic and practical choices, of course
 compared to my initial choices of Node.js, Mithril, and eat-you-own-dog-food chat hosting.
-The results look impressive from screenshots, and they are hiring
+Even though I've pretty much left Python behind myself (I was an early adopter,
+even getting it formally approved for use at IBM Research around 1999), it is still a nice language.
+And as with NarraFirma that was 1% server code, the server may not matter much if
+you are developing mostly for the client. Personally, having tried CoffeScript,
+I prefer TypeScript (a long discussion perhaps, but essentially CoffeeScript
+has some ambiguities and gotchas in the language design, and TypeScript
+is also an easier sell for JavaScript developers including by better IDE support
+for refactoring big projects based on the types).
+The N1 results look impressive from screenshots, and they are hiring
 (in San Francisco though, so not practical for me specifically).
 They have a broad contributor license that seems to give them rights to do
 anything they want with contributions (so, not limited to the Affero GPL they use);
@@ -111,7 +119,9 @@ it also has language about patents.
 They say it applies to any pull requests.
 Such agreements seem typical when a company plans a proprietary for-pay Enterprise version?
 But the FSF and other places use them as well, so that does not prove anything (although
-expectations might be different when signing broad agreements with, say, the FSF or the Apache project).  
+expectations might be different when signing broad agreements with,
+say, the FSF or the Apache project).  But Nylas are so far very open source,
+so definitely a big step forward whatever is down the road.  
 https://nylas.com/N1  
 https://github.com/nylas/N1  
 https://github.com/nylas/n1-plugins  
