@@ -99,7 +99,7 @@ As with Automattic, presumably the company's business model is paid hosting?
 So, as with Kolab, they too might become the next Automattic. 
 Server is in Python, client in JavaScript/CoffeeScript with React (and cjsx CoffeeScript/React templating).
 They use their own "sync-engine" (in Python) for storage which I think uses MySQL as the backend?
-The encourage plugins and have examples.
+They encourage plugins and have examples.
 However, they chose Slack for company communications, which perhaps tells me something about their ambitions.
 All very realistic and practical choices, of course
 compared to my initial choices of Node.js, Mithril, and eat-you-own-dog-food chat hosting.
