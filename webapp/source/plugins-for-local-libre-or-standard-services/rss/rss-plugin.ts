@@ -94,7 +94,7 @@ function parseRSS(xmlText) {
         // console.log("xmlDoc", xmlDoc);
     } catch (error) {
         console.log("error parsing xml", error);
-        loadingError = "error parsing xml" + error;
+        loadingError = "error parsing xml: " + JSON.stringify(error);
         return { items: [] };
     }
     
@@ -145,7 +145,7 @@ function newURL(url) {
         m.redraw();
     }, (failed) => {
         console.log("proxy request failed", failed);
-        loadingError = "" + failed;
+        loadingError = JSON.stringify(failed);
         fetchResult = { status: "failed" };
         m.redraw();
     });
