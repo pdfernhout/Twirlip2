@@ -1,9 +1,9 @@
-var request = require('request');
+var requestAPI = require('request');
 
 // TODO: Retrieve the requested web resource -- very unsafe:
 // TODO: user should be authenticated and trusted or requests should be restricted to local ones
-function proxyRequest(theRequest, callback) {
-	var url = theRequest.url;
+function proxyRequest(request, response) {
+	var url = request.body.url;
 	var options = {
 		uri : url,
 		jar : false,
@@ -11,9 +11,13 @@ function proxyRequest(theRequest, callback) {
 		followRedirect : true,
 		timeout : 1000 * 9
 	};
+	
+	var callback = function (requestResultMessage) {
+        response.json(requestResultMessage);
+    };
 
 	if (url.substring(0, 5) === 'http:' || url.substring(0, 6) === 'https:') {
-		request(options, function(error, response, content) {
+		requestAPI(options, function(error, response, content) {
 			if (error || content === null) {
 				if (error) {
 					callback({

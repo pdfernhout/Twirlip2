@@ -50,9 +50,7 @@ app.use(bodyParser.urlencoded({
 // Application routes
 
 app.post("/api/proxy", function (request, response) {
-    proxyRequest(request.body, function (requestResultMessage) {
-        response.json(requestResultMessage);
-    });
+    proxyRequest(request, response);
 });
 
 app.use("/$", function(req, res) {
