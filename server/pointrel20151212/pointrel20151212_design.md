@@ -191,6 +191,7 @@ General trends in Pointrel design have involved:
 * A move from having some standard base concepts that were numbered to having concept be strings
 * A move from no namespaces for pointers to namespaces to back to no namespaces again
 * A move from thinking of pointers as numbers, to UUIDs, to compound strings, to JSON objects
+* A push towards ever more simplicity yet ever more functionality
 
 ## Production use of versions of Pointrel
 
@@ -240,28 +241,37 @@ Metadata might also include the position of the object in the skein starting wit
 along with the name of the skein. Such information is always implied in the metadata.
 
 These data objects and their metadata are stored in append-only files ("skeins").
-The format is a new line, a one line canonical JSON object of metadata followed by a newline, and then the data followed by a newline.
+
+The format of the file is intended to be easy to understand, reliable to write, and quick to load.
+
+Each line has the following format:
+
+    [newline] PCE metadata-length-in-bytes [space] content-length-in-bytes [space] metadata-json [space] content-json [newline]
+
 The purpose of the extra newline at the start is to make reading a corrupted file easier.
+Writing it all on one line is also to help make corruption easier to recover from.
+The leading PCE is for synchronization in case of corruption.
+The purpose of the metadata is to describe the data as to purpose and author and time stored and more.
+The purpose of the lengths is to make it quick to read the metadata and then perhaps the data.
+Unfortunately, human readability for complex strings has been sacrificed, although they remain readbable with effor as single-line JSON.
 
 So, for example for one object:
 
-    {"sha256":"1234...","length":26}
-    Hello, world from Twirlip!
+    PCE 33 28 {"sha256":"1234...","length":26} "Hello, world from Twirlip!"
     
-Here is an example of a skein called "test@example.com:123456789.skein":
+Here is an example of a skein called "test@example.com:123456789.pces":
 
 
-    {"sha256":"1234...","length":26}
-    Hello, world from Twirlip!
+    PCE 33 28 {"sha256":"1234...","length":28} "Hello, world from Twirlip!"
     
-    {"sha256":"1234...","length":41}
-    Hello, world again.
-    This is from Twirlip!
+    PCE 33 45 {"sha256":"1234...","length":45} "Hello, world again.\nThis is from Twirlip!"
     
-    {"sha256":"1234...","length":31}
-    Hello, world from Twirlip again!
+    PCE 33 35 {"sha256":"1234...","length":35} "Hello, world from Twirlip again!"
 
-
+    PCE 33 33 {"sha256":"1234...","length":33} {"hello":"world","more":"there"}
+    
+    PCE 33 55 {"sha256":"1234...","length":55} {"_type":"triple","a":"hello","b":"there","c":"world"}
+   
 Each skein file has a unique UUID. This can either be a random UUID,
 a random UUID prefixed with an authority,
 or it can be in some guaranteed unique format (like a "tag" with an authority and sequence).
@@ -277,7 +287,7 @@ in directories that have the HSA-256 hash of the arbitrary name.
 
 It is OK to have copies of the same skein stored in more that one basket.
 
-The extension of such skein files is ".skein".
+The extension of such skein files is ".pces"  (pronounced "pieces" file) standing for "Pointrel Content Engine Skein".
 
 Each skein file is append-only. Further, these files can only be appended
 by the original author in one session. Skeins that are no longer being 
