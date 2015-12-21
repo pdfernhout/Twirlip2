@@ -4,7 +4,7 @@ var Promise = require('promise');
 var crypto = require('crypto');
 var uuid = require('node-uuid');
 
-var maxShardLength = 4096000;
+var maxSkeinLength = 4096000;
 
 var debugLogging = false;
 
@@ -17,32 +17,32 @@ function makeAlwaysSuccessfulPromise(result) {
     return promise;
 }
 
-function makeShardName() {
+function makeSkeinName() {
 	var uuid4 = uuid.v4();
-    return "shard-" + uuid4 + ".twirlip";
+    return "skein-" + uuid4 + ".twirlip";
 }
 
 function StoreMemory(defaultMetadata) {
-    this.shards = {};
-    this.sha256ToShardAndPosition = {};
+    this.skeins = {};
+    this.sha256ToSkeinAndPosition = {};
     this.defaultMetadata = defaultMetadata || {};
-    this.currentShardName = null;
-    this.allocateNewShard();
+    this.currentSkeinName = null;
+    this.allocateNewSkein();
 }
 
-StoreMemory.prototype.allocateNewShard = function() {
-    this.currentShardName = makeShardName();
-    if (debugLogging) console.log("StoreMemory: Making new shard", this.currentShardName);
-    this.shards[this.currentShardName] = "";
+StoreMemory.prototype.allocateNewSkein = function() {
+    this.currentSkeinName = makeSkeinName();
+    if (debugLogging) console.log("StoreMemory: Making new skein", this.currentSkeinName);
+    this.skeins[this.currentSkeinName] = "";
 };
 
-StoreMemory.prototype.writeToCurrentShard = function(dataString) {
-	if (this.shards[this.currentShardName].length > maxShardLength) {
-		this.allocateNewShard();
+StoreMemory.prototype.writeToCurrentSkein = function(dataString) {
+	if (this.skeins[this.currentSkeinName].length > maxSkeinLength) {
+		this.allocateNewSkein();
 	}
-	var start = this.shards[this.currentShardName].length + 1;
-	this.shards[this.currentShardName] += "\n" + dataString + "\n";
-	return {shardName: this.currentShardName, start: start, length: dataString.length};
+	var start = this.skeins[this.currentSkeinName].length + 1;
+	this.skeins[this.currentSkeinName] += "\n" + dataString + "\n";
+	return {skeinName: this.currentSkeinName, start: start, length: dataString.length};
 };
 
 StoreMemory.prototype.wrap = function(what, metadata) {      
@@ -62,14 +62,14 @@ StoreMemory.prototype.wrap = function(what, metadata) {
 
 StoreMemory.prototype.store = function(data) {
     var dataAsString = JSON.stringify(data);
-    if (dataAsString.length > maxShardLength) throw new Error("data to be stored is too long: " + dataAsString.length);
+    if (dataAsString.length > maxSkeinLength) throw new Error("data to be stored is too long: " + dataAsString.length);
     var sha256 = crypto.createHash('sha256').update(dataAsString, 'utf8').digest('hex');
     
-	var location = this.sha256ToShardAndPosition[sha256];
+	var location = this.sha256ToSkeinAndPosition[sha256];
 	if (!location) {
-	    location = this.writeToCurrentShard(dataAsString);
+	    location = this.writeToCurrentSkein(dataAsString);
 	    if (debugLogging) console.log("store: sha256 and location of data to store", sha256, location, dataAsString.substring(0, 40) + "...");
-	    this.sha256ToShardAndPosition[sha256] = location;
+	    this.sha256ToSkeinAndPosition[sha256] = location;
 	} else {
 		if (debugLogging) console.log("store: previously stored ", sha256, location, dataAsString.substring(0, 40) + "...");
 	}
@@ -78,11 +78,11 @@ StoreMemory.prototype.store = function(data) {
 };
 
 StoreMemory.prototype.fetch = function(sha256) {
-	var location = this.sha256ToShardAndPosition[sha256];
+	var location = this.sha256ToSkeinAndPosition[sha256];
 	if (!location) return null;
 	// console.log("location", location);
-	// console.log("shard", this.shards[location.shardName]);
-    var resultString = this.shards[location.shardName].substring(location.start, location.start + location.length);
+	// console.log("skein", this.skeins[location.skeinName]);
+    var resultString = this.skeins[location.skeinName].substring(location.start, location.start + location.length);
     // console.log("retrieved resultString", "|" + resultString + "|");
     var result = JSON.parse(resultString);
     // console.log("retrieved result", result);
