@@ -89,18 +89,20 @@ enthusiastic unreasonableness or not. Still, as an older Paul wrote,
 it is often the annoying seemingly ignorant questions of youth that make us old geezers think. :-)
 
 One idea Paul got from George, beside much other good advice on life and psychology,
-was the notion of open source. Paul has previously made money before Princeton
+was the notion of "free and open source". Paul has previously made money before Princeton
 writing a computer game for the Commodore VIC (which helped pay for Princeton).
 George went to great effort to get Princeton University to approve broad distribution
-of WordNet for free, and in a way that others could make use of it.
+of WordNet for free in a way that others could make derived works from it.
 That showed Paul another way to
-distribute ideas and technology besides commercial sales -- as open source.
+distribute ideas and technology besides commercial sales -- as free and open source content and software.
 George did not believe people should make their academic work proprietary and secret.
 That was very different than some other professors who turned their work into proprietary companies.
-George made a tremendous gift to the world, both the gift itself, 
-showing others how it could be done, and also showing what was possible when you were "old", 
+George made a tremendous gift to the world
 -- a gift started by a sixty-five year old professor who then spent the next two decades
 or so working tirelessly on the project with his beloved wife Kitty, adding one word at a time.
+Beyond they gift that included WordNet itself, he gave the gift of
+showing others how open source could be done in academia even with the Bayh–Dole Act making possible rent-seeking by universities.
+He also gave the gift of showing what was possible when you were "old" and forced to retire.
 WordNet has changed the landscape of the computer science field and industry.
 George's work on WordNet was funded by the intelligence community.
 His early work on communication had been funded by the Air Force.
