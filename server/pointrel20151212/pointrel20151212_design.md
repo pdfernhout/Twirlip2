@@ -246,38 +246,44 @@ The format of the file is intended to be easy to understand, reliable to write, 
 
 Each object + metadata pair has the following format:
 
-    [newline = \n] PCE metadata-length-in-bytes [space] content-length-in-bytes [space] purpose [space] metadata-json [newline]
-    content-bytes-in-any-encoding-but-utf8-preferred [newline]
+    [newline = \n] @@@PCE metadata-length-in-bytes [space] content-length-in-bytes [space] metadata-json [newline]
+    content-bytes-in-utf8-maybe-with-newlines [newline]
 
 The purpose of the extra newline at the start is to make reading a corrupted file easier.
 Writing it all on one line is also to help make corruption from failed writes easier to recover from.
-The leading PCE is for synchronization in case of corruption.
+The leading @@@PCE is for synchronization in case of corruption (not foolproof, but could help).
 The purpose of the metadata is to describe the data as to purpose and author and time stored and more.
 The purpose of the lengths is to make it quick to read the metadata and then perhaps the data at startup if no caching is done in an indexed database.
 
 So, for example for one object:
 
-    PCE 33 28 {"sha256":"1234...","length":26}
+    @@@PCE 33 28 {"sha256":"1234...","length":26}
     "Hello, world from Twirlip!"
     
 Here is an example of a skein called "test@example.com:123456789.pces" (lengths and hashes not exact):
 
 
-    PCE 33 28 {"sha256":"1234...","length":28}
+    @@@PCE 73 28 {"sha256":"1234...","length":28,"format":"application/json"}
     "Hello, world from Twirlip!"
     
-    PCE 33 45 {"sha256":"1234...","length":45}
-    "Hello, world again.\nThis is from Twirlip!"
+    @@@PCE 33 78 {"sha256":"1234...","length":43,"format":"mbox"}
+    To: world@example.com
+    Subject: Test message
     
-    PCE 33 35 {"sha256":"1234...","length":35}
+    Hello! This is from Twirlip!
+    
+    @@@PCE 33 35 {"sha256":"1234...","length":35}
     "Hello, world from Twirlip again!"
 
-    PCE 33 33 {"sha256":"1234...","length":33}
+    @@@PCE 33 33 {"sha256":"1234...","length":33}
     {"hello":"world","more":"there"}
     
-    PCE 53 55 {"sha256":"1234...","length":55,"purpose":"triple"}
+    @@@PCE 53 55 {"sha256":"1234...","length":55,"purpose":"triple"}
     {"_type":"triple","a":"hello","b":"there","c":"world"}
    
+
+The default content type is "application/json".
+
 Each skein file has a unique UUID. This can either be a random UUID,
 a random UUID prefixed with an authority,
 or it can be in some guaranteed unique format (like a "tag" with an authority and sequence).
