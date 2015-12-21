@@ -244,12 +244,13 @@ These data objects and their metadata are stored in append-only files ("skeins")
 
 The format of the file is intended to be easy to understand, reliable to write, and quick to load.
 
-Each line has the following format:
+Each object + metadata pair has the following format:
 
-    [newline] PCE metadata-length-in-bytes [space] content-length-in-bytes [space] metadata-json [space] content-json [newline]
+    [newline = \n] PCE metadata-length-in-bytes [space] content-length-in-bytes [space] purpose [space] metadata-json [newline]
+    content [newline]
 
 The purpose of the extra newline at the start is to make reading a corrupted file easier.
-Writing it all on one line is also to help make corruption easier to recover from.
+Writing it all on one line is also to help make corruption from failed writes easier to recover from.
 The leading PCE is for synchronization in case of corruption.
 The purpose of the metadata is to describe the data as to purpose and author and time stored and more.
 The purpose of the lengths is to make it quick to read the metadata and then perhaps the data.
@@ -257,20 +258,26 @@ Unfortunately, human readability for complex strings has been sacrificed, althou
 
 So, for example for one object:
 
-    PCE 33 28 {"sha256":"1234...","length":26} "Hello, world from Twirlip!"
+    PCE 33 28 {"sha256":"1234...","length":26}
+    "Hello, world from Twirlip!"
     
-Here is an example of a skein called "test@example.com:123456789.pces":
+Here is an example of a skein called "test@example.com:123456789.pces" (lengths and hashes not exact):
 
 
-    PCE 33 28 {"sha256":"1234...","length":28} "Hello, world from Twirlip!"
+    PCE 33 28 string {"sha256":"1234...","length":28}
+    "Hello, world from Twirlip!"
     
-    PCE 33 45 {"sha256":"1234...","length":45} "Hello, world again.\nThis is from Twirlip!"
+    PCE 33 45 string {"sha256":"1234...","length":45}
+    "Hello, world again.\nThis is from Twirlip!"
     
-    PCE 33 35 {"sha256":"1234...","length":35} "Hello, world from Twirlip again!"
+    PCE 33 35 string {"sha256":"1234...","length":35}
+    "Hello, world from Twirlip again!"
 
-    PCE 33 33 {"sha256":"1234...","length":33} {"hello":"world","more":"there"}
+    PCE 33 33 string {"sha256":"1234...","length":33}
+    {"hello":"world","more":"there"}
     
-    PCE 33 55 {"sha256":"1234...","length":55} {"_type":"triple","a":"hello","b":"there","c":"world"}
+    PCE 53 55 triple {"sha256":"1234...","length":55,"purpose":"triple"}
+    {"_type":"triple","a":"hello","b":"there","c":"world"}
    
 Each skein file has a unique UUID. This can either be a random UUID,
 a random UUID prefixed with an authority,
