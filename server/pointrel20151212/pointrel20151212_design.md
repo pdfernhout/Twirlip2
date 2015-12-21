@@ -216,14 +216,14 @@ using the Unicode character set.
 Imported data that is binary or in non-unicode encoding and is desired to be preserved in its original form 
 can be wrapped somehow like hexadecimal, base32, or base64 encoding of binary data.
 
-This version of the Pointrel system uses a spinning and weaving metaphor, in memory of Fran Mazolli.
-Thanks for showing us how to spin, Fran!
+This version of the Pointrel system uses a spinning and weaving metaphor to explain itself, in memory of Fran Mazolli.
+Thanks for showing us how to spin/twirl, Fran!
 
 At the conceptual base of Pointrel is the immutable data "fiber" (or object).
 These data fibers are "spun" or "twirled" into a "thread" or "yarn" stored in a "skein" (or shard/file).
 Skeins themselves are stored in a "basket" (or directory).
 Baskets can be stored anywhere they can fit (at any compatible internet service).
-Fibers from one or more skeins taken from any combination of baskets can be used to weave a "tapestry" (UX display).
+Fibers (as segments of spun yarn) from one or more skeins taken from any combination of baskets can be used to weave a "tapestry" (UX display).
 
 However, it does not quite make physical sense to think of plucking fibers from a skein to do weaving.
 Another way of seeing this (for a Native American analogy) is that data objects are like immutable beads.
@@ -247,14 +247,13 @@ The format of the file is intended to be easy to understand, reliable to write, 
 Each object + metadata pair has the following format:
 
     [newline = \n] PCE metadata-length-in-bytes [space] content-length-in-bytes [space] purpose [space] metadata-json [newline]
-    content [newline]
+    content-bytes-in-any-encoding-but-utf8-preferred [newline]
 
 The purpose of the extra newline at the start is to make reading a corrupted file easier.
 Writing it all on one line is also to help make corruption from failed writes easier to recover from.
 The leading PCE is for synchronization in case of corruption.
 The purpose of the metadata is to describe the data as to purpose and author and time stored and more.
-The purpose of the lengths is to make it quick to read the metadata and then perhaps the data.
-Unfortunately, human readability for complex strings has been sacrificed, although they remain readbable with effor as single-line JSON.
+The purpose of the lengths is to make it quick to read the metadata and then perhaps the data at startup if no caching is done in an indexed database.
 
 So, for example for one object:
 
@@ -264,19 +263,19 @@ So, for example for one object:
 Here is an example of a skein called "test@example.com:123456789.pces" (lengths and hashes not exact):
 
 
-    PCE 33 28 string {"sha256":"1234...","length":28}
+    PCE 33 28 {"sha256":"1234...","length":28}
     "Hello, world from Twirlip!"
     
-    PCE 33 45 string {"sha256":"1234...","length":45}
+    PCE 33 45 {"sha256":"1234...","length":45}
     "Hello, world again.\nThis is from Twirlip!"
     
-    PCE 33 35 string {"sha256":"1234...","length":35}
+    PCE 33 35 {"sha256":"1234...","length":35}
     "Hello, world from Twirlip again!"
 
-    PCE 33 33 string {"sha256":"1234...","length":33}
+    PCE 33 33 {"sha256":"1234...","length":33}
     {"hello":"world","more":"there"}
     
-    PCE 53 55 triple {"sha256":"1234...","length":55,"purpose":"triple"}
+    PCE 53 55 {"sha256":"1234...","length":55,"purpose":"triple"}
     {"_type":"triple","a":"hello","b":"there","c":"world"}
    
 Each skein file has a unique UUID. This can either be a random UUID,
