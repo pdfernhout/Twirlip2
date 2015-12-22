@@ -68,9 +68,15 @@ User stories:
 * As a developer, I want a way to store data on disk in a way reminiscent of mbox format, so that I can verify its operation
 * As a user, I want to be able to look at files and see a readable version of emails I send, so that I can have confidence in the system
 
+Tasks:
+
 * Create a version of the Pointrel data storage system that stores data on disk in a way reminiscent of mbox format
-* Create unit tests for the data storage system
+* Create unit tests for the base data storage system
 * Create documentation for file format
+* Create a simple way to index data in triples
+* Unit tests for triple index
+* Create a simple way to index data in tuples and documents
+* Unit tests for tuples / documents indexing
 
 ### RSS Feeds
 
