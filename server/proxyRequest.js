@@ -1,4 +1,5 @@
 var requestAPI = require('request');
+var respond = require("./respond");
 
 // TODO: Retrieve the requested web resource -- very unsafe:
 // TODO: user should be authenticated and trusted or requests should be restricted to local ones
@@ -17,35 +18,19 @@ function proxyRequest(request, response) {
     };
 
 	if (url.substring(0, 5) === 'http:' || url.substring(0, 6) === 'https:') {
-		requestAPI(options, function(error, response, content) {
+		requestAPI(options, function(error, requestResponse, content) {
 			if (error || content === null) {
 				if (error) {
-					callback({
-						success : false,
-						status : "failed",
-						errorMessage : "The request failed for some reason: " + error
-					});
+					respond.fail(response, "The request failed for some reason: " + error);
 				} else {
-					callback({
-						success : false,
-						status : "failed",
-						errorMessage : "The resource is not available: " + url
-					});
+				    respond.fail(response, "The resource is not available: " + url);
 				}
 			} else {
-				callback({
-					success : true,
-					status : "OK",
-					content: content
-				});
+			    respond.success(response, { content: content });
 			}
 		});
 	} else {
-		callback({
-			success : false,
-			status : "disallowed",
-			errorMessage : "Only http or https protocols are allowed: " + url
-		});
+	    respond.fail(response, "Only http or https protocols are allowed: " + url);
 	}
 }
 
