@@ -15,6 +15,7 @@ var bodyParser = require('body-parser');
 
 // Support
 var proxyRequest = require('./proxyRequest');
+var storeRequest = require('./storeRequest');
 
 // Main code
 
@@ -51,6 +52,10 @@ app.use(bodyParser.urlencoded({
 
 app.post("/api/proxy", function (request, response) {
     proxyRequest(request, response);
+});
+
+app.post("/api/store", function (request, response) {
+    storeRequest(request, response);
 });
 
 app.use("/$", function(req, res) {
