@@ -54,6 +54,7 @@ StoreMemory.prototype.writeToCurrentSkein = function(buffer) {
 	    throw new Error("skein.write did not provide expected value: " + writtenCount + " expected: " + buffer.length);
 	}
 	skein.length += writtenCount;
+	// console.log("skein contents\n", skein.buffer.toString("utf8", 0, skein.length));
 	return {skeinName: this.currentSkeinName, start: start, length: buffer.length};
 };
 
