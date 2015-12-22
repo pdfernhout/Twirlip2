@@ -9,9 +9,11 @@ Because this is not an official Mozilla project, I'm calling it Twirlip and not 
 
 If I had more time, I'd have involved people on this list in planning this sprint, rather than just forge ahead without substantial discussion. But sometimes you have to "code first and ask questions later" in an agile way, to get good feedback given an all too common "failure of the imagination", right? :-) And hopefully once this system is working at a minimal level of functionality, future sprints could eventually be designed using the software itself in a bootstrapping way, time permitting. :-)
 
-## Day-by-day user stories and tasks for Thunderbird Server / Twirlip
+This was originally intended to be a very ambitious one-week sprint, but realistically speaking it is a much longer term project.
 
-### Saturday/Sunday 2015-12-12 to 2015-12-13:
+## Milestones for Thunderbird Server / Twirlip Proof-Of-Concept (POC)
+
+### Project Planning and Setup
 
 User stories:
 
@@ -34,7 +36,7 @@ Tasks:
 * DEFER Create initial unit test for server that then stores and retrieves immutable data from the local file system
 * BACKLOG Hooking up tests and build script to a continuous integration build server (would be nice, but that CI part is probably not gonna happen this week by me)
 
-### Monday and Tuesday (extra two days unplanned) 2015-12-14 to 2015-12-15
+### Data Storage Thinking
 
 * DONE Create code to store immutable data in a memory store for testing
 * DONE Create initial unit test for server that then stores and retrieves immutable data from the memory store
@@ -59,7 +61,18 @@ I am deferring storing data to the file system until the storage and indexing AP
 (including an in-memory indexer) are worked out better during the next couple of days supporting RSS, IRC, and email UI tasks.
 Permanent storage is not even needed for a demo I am realizing, although I still want to demonstrate it during the sprint so it is getting left towards the end.
 
-### Wednesday (was originally Monday) 2015-12-16
+### Data Storage Implementation
+
+User stories:
+
+* As a developer, I want a way to store data on disk in a way reminiscent of mbox format, so that I can verify its operation
+* As a user, I want to be able to look at files and see a readable version of emails I send, so that I can have confidence in the system
+
+* Create a version of the Pointrel data storage system that stores data on disk in a way reminiscent of mbox format
+* Create unit tests for the data storage system
+* Create documentation for file format
+
+### RSS Feeds
 
 User stories:
 
@@ -75,7 +88,7 @@ Tasks:
 * Support searching annotations with specific text strings
 * Unit tests for each of the above (ideally written beforehand)
 
-### Thursday (was originally Tuesday) 2015-12-17
+### Chat Client
 
 User stories:
 
@@ -91,7 +104,7 @@ Tasks:
 * Use socket.io for real-time notifications to refresh the webapp GUI
 * Unit tests for each of the above (ideally written beforehand)
 
-### Friday (was originally Wednesday) 2015-12-18
+### Read Thunderbird and Pipermail Archives
 
 User stories:
 
@@ -111,7 +124,7 @@ Tasks:
 https://mail.mozilla.org/pipermail/tb-planning/
 * Unit tests for each of the above (ideally written beforehand)
 
-### Saturday (was originally Thursday) 2015-12-19
+### Receive POP3 email and send SMTP email
 
 User stories:
 
@@ -133,7 +146,7 @@ Tasks:
 * Read new tb-planning post either from a local Thunderbird mbox or by reloading the pipermail archive.
 * Unit tests for each of the above (ideally written beforehand)
 
-### Sunday (was originally Friday) 2015-12-20
+### Share annotations, wiki pages, and IBIS maps
 
 User stories:
 
