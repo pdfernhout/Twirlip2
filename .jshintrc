@@ -1,0 +1,8 @@
+{
+  "undef": true,
+  "node": true,
+  "mocha": true,
+  "globals": {
+    "Promise"   : true
+  }
+}
