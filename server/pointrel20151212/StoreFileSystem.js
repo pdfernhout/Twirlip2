@@ -12,6 +12,15 @@ var maxShardLength = 4096000;
 
 var debugLogging = false;
 
+function makeAlwaysSuccessfulPromise(result) {
+    var promise = new Promise(function (resolve, reject) {
+        // reject("Unfinished");
+        resolve(result);
+    });
+    
+    return promise;
+}
+
 function makeShardName() {
 	var uuid4 = uuid.v4();
     return "shard-" + uuid4 + ".twirlip";
