@@ -303,14 +303,16 @@ WordNet is its own system based on George's understanding of the lexicographic
 organization of part of the human mind, and George had previously had talks
 with Herbert Simon and Allen Newell about data representation.
 WordNet does not involve triples specifically, and WordNet is not a general system like Pointrel.
-However, before Paul started working with George, George was not writing any specific
-representational content or software -- although he was working towards understanding dictionaries
+However, WordNet does focus on semantic relationships between words (which can be modeled as triples);
+Before Paul started working with George, George was not writing any specific
+representational content or software. He was working towards understanding dictionaries
 better in conjunction with graduate students, in particular, one studying Le Petit Robert, a French dictionary).
-George had also been working towards helping kids learn language better or faster using videodisk systems displaying scenes related to words.
+George's main focus then had been working towards helping kids learn language better or faster using videodisk systems
+displaying scenes related to words (like showing a scene of a jungle along with the word "verdant").
 George told Paul that he was making WordNet in part
 to show people (including him) that a concept network was not enough by itself to do AI.
 
-To be clear, as he wrote on the C2 wiki ( http://c2.com/cgi/wiki?PaulFernhout )
+To be clear, as Paul wrote on the C2 wiki ( http://c2.com/cgi/wiki?PaulFernhout )
 Paul does not want to put any claim to George's own unique big picture
 on semantic memory or all his hard work over decades to put WordNet together
 or all his other connections to people doing AI for decades.
@@ -399,6 +401,9 @@ So in that sense, Pointrel as a semantic triplestore has been both affirmed and 
 But, as above, it is possible the Pointrel ideas are linked to William Kent's prior work,
 which Paul only rediscovered much later by chance seeing Kent's book 
 (perhaps not for the first time) in the Iowa State University library in the mid 1990s.
+Paul later corresponded with William Kent in the mid-2000s about data storage ideas, but by then
+Bill had moved on to other interests (like nature photography and broader writing) after what he called a nervous breakdown.
+Such breakdowns are probably always a risk when you spend a lot of time thinking hard about the nature of "Data and Reality". :-)
 Paul also learned about other Entity-Attribute-Value stores, like one by IBM and one in MUMPS.
 So, he can't claim those ideas are really "new". As his wife says,
 great ideas are like whales, you may be lucky to swim alongside one for a time,
