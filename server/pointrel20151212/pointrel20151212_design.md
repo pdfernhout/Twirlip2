@@ -273,16 +273,16 @@ For now, only the JSON version will be supported:
     
 Abstract ideals can also be represented like so (assuming text/plain in unicode is the default):
 
-   pointrel:{"p":"Concept","c":"Democracy"}
-
+    pointrel:{"p":"Concept","c":"Democracy"}
+    
 Or in human-friendly JSON-variant:
 
-   pointrel:{p:"Concept",c:"Democracy"}
-   
+    pointrel:{p:"Concept",c:"Democracy"}
+    
 Or even more concisely (assuming a very custom parser):
 
-   pointrel:{p:Concept,c:Democracy}
-   
+    pointrel:{p:Concept,c:Democracy}
+    
 Where acceptable abbreviations are p = purpose, h = SHA-256 hash, l = length, f = format, t = timestamp, a = author, and c = content.
 
 ## Pointrel History
