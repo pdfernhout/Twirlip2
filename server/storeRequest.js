@@ -7,19 +7,23 @@ var StoreMemory = require("./pointrel20151212/StoreMemory");
 function storeRequest(request, response) {
     var apiRequest = request.body;
     
+    console.log("storeRequest", apiRequest);
+    
     var requestType = apiRequest.type;
     
-    if (requestType === "store") return storeRequest(apiRequest, response);
+    if (requestType === "store") return doStoreRequest(apiRequest, response);
     
-    if (requestType === "fetch") return fetchRequest(apiRequest, response);
-    
+    if (requestType === "fetch") return doFetchRequest(apiRequest, response);
+
+    // if (requestType === "addBasket") return doAddBacketRequest(apiRequest, response);
+
     respond.fail(response, "Unsupported store api request: " + requestType);
 }
 
 var baskets = {};
 
 // TODO: Support storing either string with content type or an object
-function storeRequest(apiRequest, response) {
+function doStoreRequest(apiRequest, response) {
     var content = apiRequest.content;
     if (respond.failIfUndefined(response, content, "content")) return;
     
@@ -31,7 +35,7 @@ function storeRequest(apiRequest, response) {
     var basket = baskets[basketName];
     if (!basket) {
         basket = new StoreMemory();
-        baskets[basketName] = baskets;
+        baskets[basketName] = basket;
     }
     
     basket.storeDataObject(content).then(function (sha256) {
@@ -40,7 +44,7 @@ function storeRequest(apiRequest, response) {
 }
 
 // TODO: Support multiple baskets in search
-function fetchRequest(apiRequest, response) {
+function doFetchRequest(apiRequest, response) {
     var sha256 = apiRequest.sha256;
     if (respond.failIfUndefined(response, sha256, "sha256")) return;
     
