@@ -31,6 +31,6 @@ function failIfUndefined(response, field, fieldName) {
     return true;
 }
 
-exports.success = fail;
+exports.success = success;
 exports.fail = fail;
 exports.failIfUndefined = failIfUndefined;
