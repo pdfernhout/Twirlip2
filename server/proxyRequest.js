@@ -12,12 +12,10 @@ function proxyRequest(request, response) {
 		followRedirect : true,
 		timeout : 1000 * 9
 	};
-	
-	var callback = function (requestResultMessage) {
-        response.json(requestResultMessage);
-    };
 
-	if (url.substring(0, 5) === 'http:' || url.substring(0, 6) === 'https:') {
+    if (!url) {
+    	respond.fail(response, "url field was not specified in request: " + JSON.stringify(request.body));
+    } else if (url.substring(0, 5) === 'http:' || url.substring(0, 6) === 'https:') {
 		requestAPI(options, function(error, requestResponse, content) {
 			if (error || content === null) {
 				if (error) {
