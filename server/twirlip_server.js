@@ -2,6 +2,9 @@
 /* jslint node: true */
 "use strict";
 
+var testDelay_ms = 0;
+// var testDelay_ms = 1000;
+
 // Standard nodejs modules
 
 var fs = require('fs');
@@ -50,10 +53,12 @@ app.use(bodyParser.urlencoded({
 
 // Application routes
 
-// TODO: Temporary -- add one second delay for testing
-// app.use(function(request, response, next){
-//	setTimeout(next, 1000);
-// });
+// Add a delay in handling for each request for testing if specified
+if (testDelay_ms) {
+	app.use(function(request, response, next){
+		setTimeout(next, testDelay_ms);
+	});
+}
 
 app.post("/api/proxy", function (request, response) {
     proxyRequest(request, response);
