@@ -9,6 +9,9 @@ rssPlugin.initialize();
 import systemDiagnosticsPlugin = require("./plugins-for-local-libre-or-standard-services/system-diagnostics/system-diagnostics-plugin");
 systemDiagnosticsPlugin.initialize();
 
+import chatTextPlugin = require("./plugins-for-local-libre-or-standard-services/chat-text/chat-text-plugin");
+chatTextPlugin.initialize();
+
 // Test: http://localhost:9000/twirlip.html
 
 var PageDisplayer: any = {
@@ -29,6 +32,7 @@ var PageDisplayer: any = {
             m("a", { href: "http://www.yorkmaze.com/thunderbirds-are-grow/" }, "coincidence?"),
             " :-)",
             systemDiagnosticsPlugin.display(),
+            chatTextPlugin.display(),
             rssPlugin.display()
         ]);
     }
