@@ -2,11 +2,40 @@
 
 import m = require("mithril");
 
+var currentChannel = "test";
+var messages = [];
+var currentMessage = ""
+
 export function initialize() {
+    // TODO: Somehow get a list of relevant messages out of all the ones out there now or later
+    changeChannelClicked();
+    
     console.log("Chat Text plugin initialized");
 }
 
-var messages = [];
+function displayChatChannel() {
+    return m("div", [
+        "Channel:",
+        m("input", {
+            value: currentChannel,
+            onchange: m.withAttr("value", currentChannelChanged), 
+            onkeyup: inputKeyPress.bind(null, changeChannelClicked),
+            size: "80"
+        }),
+        m("button", {onclick: changeChannelClicked}, "Change channel")
+    ]
+    );
+}
+
+function currentChannelChanged(channel) {
+    currentChannel = channel;
+}
+
+function changeChannelClicked() {
+    console.log("changeChannelClicked", changeChannelClicked);
+    // TODO: Somehow get a list of relevant messages out of all the ones out there
+
+}
 
 function displayMessageStatus(message) {
     if (message.status === "stored") return [];
@@ -17,7 +46,7 @@ function displayMessageStatus(message) {
     
     if (message.status === "failed") {
         result.push(" ");
-        result.push(m("button", {onclick: sendMessage.bind(null, message)}, "Resend!"));
+        result.push(m("button", {onclick: sendMessage.bind(null, message)}, "Resend"));
     }
     
     return result;
@@ -76,16 +105,14 @@ function currentMessageChanged(message) {
     currentMessage = message;
 }
 
-var currentMessage = "";
-
-function inputKeyPress(event) {
+function inputKeyPress(event, callback) {
     var keycode = event.keycode || event.which || 0;
     // console.log("inputKeyPress", keycode);
     if (keycode === 13) {
         event.preventDefault();
-        return sendMessageClicked();
+        return callback();
     }
-    // Do not redraw for a character press as currentMessage will be out of sync with input field
+    // Do not redraw for a character press as stored text will be out of sync with input field
     m.redraw.strategy("none");
 }
     
@@ -95,10 +122,10 @@ function displayChatEntry() {
         m("input", {
             value: currentMessage,
             onchange: m.withAttr("value", currentMessageChanged), 
-            onkeyup: inputKeyPress,
+            onkeyup: inputKeyPress.bind(null, sendMessageClicked),
             size: "80"
         }),
-        m("button", {onclick: sendMessageClicked}, "Send!")
+        m("button", {onclick: sendMessageClicked}, "Send")
     ]
     );
 }
@@ -107,6 +134,7 @@ export function display() {
     return m("div.chatTextPlugin", [
         m("hr"),
         m("strong", "Chat Text plugin"), m("br"),
+        displayChatChannel(),
         displayChatLog(),
         displayChatEntry()
     ]);
