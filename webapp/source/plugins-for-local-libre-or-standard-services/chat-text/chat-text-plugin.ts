@@ -3,12 +3,13 @@
 import m = require("mithril");
 
 var currentChannel = "test";
-var messages = [];
+var channelChangeInProgress = false;
+var currentMessages = [];
 var currentMessage = ""
 
 export function initialize() {
     // TODO: Somehow get a list of relevant messages out of all the ones out there now or later
-    changeChannelClicked();
+    // changeChannelClicked();
     
     console.log("Chat Text plugin initialized");
 }
@@ -34,7 +35,44 @@ function currentChannelChanged(channel) {
 function changeChannelClicked() {
     console.log("changeChannelClicked", changeChannelClicked);
     // TODO: Somehow get a list of relevant messages out of all the ones out there
-
+    // TODO: Then somehow track any new messages on that channel from others
+    
+    currentMessages = [];
+    channelChangeInProgress = true;
+    
+    m.request({
+        method: "POST", 
+        url: "/api/index", 
+        data: {
+            action: "chat-index-get-all-messages-for-channel",
+            channel: currentChannel,
+            basket: "test"
+        },
+        deserialize: (data) => {
+            try {
+                return JSON.parse(data);
+            } catch (e) {
+                console.log("api index error", data);
+                channelChangeInProgress = false;
+                return {success: false, status: "failed", data: data};
+            }
+        }
+    }).then((result: any) => {
+        console.log("m.request result", result);
+        channelChangeInProgress = false;
+        if (result.success) {
+            console.log("channel messages load success");
+            // TODO: load message list from result
+            // TODO: Should all the messages be replaced or just some?
+            currentMessages = [];
+        } else {
+            console.log("channel messages load failed");
+        }
+    }, (error) => {
+        console.log("api index error", error);
+    });
+    
+    m.redraw();
 }
 
 function displayMessageStatus(message) {
@@ -55,7 +93,7 @@ function displayMessageStatus(message) {
 function displayChatLog() {
     return m("div", [
         "Chat log:", m("br"),
-        messages.map((message) => {
+        currentMessages.map((message) => {
             return m("div.message", [
                 message.text,
                 displayMessageStatus(message)
@@ -71,7 +109,7 @@ function sendMessageClicked() {
         status: "prepared",
         sha256: null
     };
-    messages.push(newMessage);
+    currentMessages.push(newMessage);
     currentMessage = ""
     
     sendMessage(newMessage);
@@ -135,7 +173,9 @@ export function display() {
         m("hr"),
         m("strong", "Chat Text plugin"), m("br"),
         displayChatChannel(),
-        displayChatLog(),
-        displayChatEntry()
+        channelChangeInProgress ? "Channel change in progress..." : [
+            displayChatLog(),
+            displayChatEntry()
+        ]
     ]);
 }
