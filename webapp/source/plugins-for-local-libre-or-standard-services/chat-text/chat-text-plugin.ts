@@ -12,14 +12,21 @@ function displayChatLog() {
     return m("div", [
         "Chat log:", m("br"),
         messages.map((message) => {
-            return m("div.message", message);
+            return m("div.message", [
+                message.text,
+                message.status === "pending" ? m("i", " (pending)") : ""
+            ]);
         })
     ]);
 }
 
 function sendMessage() {
     console.log("send message", currentMessage);
-    messages.push(currentMessage);
+    var newMessage = {
+        text: currentMessage,
+        status: "pending"
+    };
+    messages.push(newMessage);
     currentMessage = ""
 }
 
