@@ -6,12 +6,52 @@ export function initialize() {
     console.log("Chat Text plugin initialized");
 }
 
+var messages = [];
+
 function displayChatLog() {
-    return m("div", "Chat log goes here");
+    return m("div", [
+        "Chat log:", m("br"),
+        messages.map((message) => {
+            return m("div.message", message);
+        })
+    ]);
 }
 
+function sendMessage() {
+    console.log("send message", currentMessage);
+    messages.push(currentMessage);
+    currentMessage = ""
+}
+
+function currentMessageChanged(message) {
+    currentMessage = message;
+}
+
+var currentMessage = "";
+
+function inputKeyPress(event) {
+    var keycode = event.keycode || event.which || 0;
+    // console.log("inputKeyPress", keycode);
+    if (keycode === 13) {
+        event.preventDefault();
+        return sendMessage();
+    }
+    // Do not redraw for a character press as currentMessage will be out of sync with input field
+    m.redraw.strategy("none");
+}
+    
 function displayChatEntry() {
-    return m("div", "Chat entry goes here");
+    return m("div", [
+        "Message:",
+        m("input", {
+            value: currentMessage,
+            onchange: m.withAttr("value", currentMessageChanged), 
+            onkeyup: inputKeyPress,
+            size: "80"
+        }),
+        m("button", {onclick: sendMessage}, "Send!")
+    ]
+    );
 }
 
 export function display() {
