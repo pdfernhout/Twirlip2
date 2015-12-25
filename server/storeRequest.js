@@ -9,21 +9,23 @@ function storeRequest(request, response) {
     
     console.log("storeRequest", apiRequest);
     
-    var requestType = apiRequest.type;
+    var requestedAction = apiRequest.action;
     
-    if (requestType === "store") return doStoreRequest(apiRequest, response);
+    if (respond.failIfUndefined(response, requestedAction, "action")) return;
     
-    if (requestType === "fetch") return doFetchRequest(apiRequest, response);
+    if (requestedAction === "store") return doStoreAction(apiRequest, response);
+    
+    if (requestedAction === "fetch") return doFetchAction(apiRequest, response);
 
-    // if (requestType === "addBasket") return doAddBacketRequest(apiRequest, response);
+    // if (requestType === "addBasket") return doAddBasketAction(apiRequest, response);
 
-    respond.fail(response, "Unsupported store api request: " + requestType);
+    respond.fail(response, "Unsupported store api request: " + requestedAction);
 }
 
 var baskets = {};
 
 // TODO: Support storing either string with content type or an object
-function doStoreRequest(apiRequest, response) {
+function doStoreAction(apiRequest, response) {
     var content = apiRequest.content;
     if (respond.failIfUndefined(response, content, "content")) return;
     
@@ -44,7 +46,7 @@ function doStoreRequest(apiRequest, response) {
 }
 
 // TODO: Support multiple baskets in search
-function doFetchRequest(apiRequest, response) {
+function doFetchAction(apiRequest, response) {
     var sha256 = apiRequest.sha256;
     if (respond.failIfUndefined(response, sha256, "sha256")) return;
     

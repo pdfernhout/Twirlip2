@@ -13,7 +13,7 @@ describe("Twirlip storage test", function() {
 			request.post({
 				url: url,
 				form: {
-				    type: "store",
+				    action: "store",
 				    content: testContent,
 				    basket: "test"
 				}
@@ -32,7 +32,7 @@ describe("Twirlip storage test", function() {
 			request.post({
 				url: url,
 				form: {
-				    type: "fetch",
+				    action: "fetch",
 				    sha256: sha256Expected,
 				    basket: "test"
 				}

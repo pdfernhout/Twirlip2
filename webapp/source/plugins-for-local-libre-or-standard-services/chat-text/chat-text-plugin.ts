@@ -33,7 +33,7 @@ function sendMessage() {
         method: "POST", 
         url: "/api/store", 
         data: {
-            type: "store",
+            action: "store",
             content: newMessage.text,
             basket: "test"
         }
