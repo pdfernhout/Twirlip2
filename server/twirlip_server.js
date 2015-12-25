@@ -50,12 +50,19 @@ app.use(bodyParser.urlencoded({
 
 // Application routes
 
+// TODO: Temporary -- add two second delay for testing
+// app.use(function(request, response, next){
+//	setTimeout(next, 2000);
+// });
+
 app.post("/api/proxy", function (request, response) {
     proxyRequest(request, response);
 });
 
 app.post("/api/store", function (request, response) {
-    storeRequest(request, response);
+	// TODO: Temporary one second delay for testing
+	setTimeout(storeRequest.bind(this, request, response), 1000);
+    // storeRequest(request, response);
 });
 
 app.use("/$", function(req, res) {
