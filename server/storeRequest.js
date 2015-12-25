@@ -13,6 +13,8 @@ function storeRequest(request, response) {
     
     if (respond.failIfUndefined(response, requestedAction, "action")) return;
     
+    if (Math.random() < 0.3) return respond.fail(response, "Random failure for testing");
+    
     if (requestedAction === "store") return doStoreAction(apiRequest, response);
     
     if (requestedAction === "fetch") return doFetchAction(apiRequest, response);
