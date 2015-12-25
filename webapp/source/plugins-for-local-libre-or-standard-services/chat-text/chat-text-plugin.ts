@@ -44,8 +44,13 @@ function changeChannelClicked() {
         method: "POST", 
         url: "/api/index", 
         data: {
-            action: "chat-index-get-all-messages-for-channel",
-            channel: currentChannel,
+            // index: "chat-index-get-all-messages-for-channel",
+            index: "triples",
+            a: {purpose: "ChatChannel", content: currentChannel},
+            // a: "pointrel:ChatChannel:" + currentChannel
+            limit: 100,
+            // sorted by latest to earliest by default
+            // channel: currentChannel,
             basket: "test"
         },
         deserialize: (data) => {
