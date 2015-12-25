@@ -28,6 +28,21 @@ function sendMessage() {
     };
     messages.push(newMessage);
     currentMessage = ""
+    
+    m.request({
+        method: "POST", 
+        url: "/api/store", 
+        data: {
+            type: "store",
+            content: newMessage.text,
+            basket: "test"
+        }
+    }).then((result: any) => {
+        console.log("m.request result", result);
+        if (result.success) newMessage.status = "stored";
+    });
+    
+    m.redraw();
 }
 
 function currentMessageChanged(message) {
