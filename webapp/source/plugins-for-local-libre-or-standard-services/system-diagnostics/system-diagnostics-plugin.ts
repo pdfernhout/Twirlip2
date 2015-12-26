@@ -28,7 +28,23 @@ function setPoll(value) {
 
 function poll() {
     console.log("polling");
-    pollingTimeout = setTimeout(poll, 5000);
+    pollingTimeout = null;
+    
+    m.request({
+        method: "POST", 
+        url: "/api/store", 
+        data: {
+            action: "basketList",
+        }
+    }).then((result: any) => {
+        console.log("m.request basket list result", result);
+        if (result.success) {
+            basketNames = result.basketNames;
+        } else {
+            console.log("polling for basket list failed");
+        }
+        pollingTimeout = setTimeout(poll, 5000);
+    });
 }
 
 export function display() {
