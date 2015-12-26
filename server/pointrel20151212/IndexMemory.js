@@ -10,20 +10,44 @@ function makeAlwaysSuccessfulPromise(result) {
 }
 
 function IndexMemory() {
-    this.stores = [];
+    // this.stores = [];
     
     this.indexABC = {};
 }
 
-IndexMemory.prototype.addStore = function(store) {
+// TODO: Index should be able to be coupled after Store has been running by using an iterator
+/*
+IndexMemory.prototype.trackStore = function(store) {
+    // TODO: Check if already tracking the store
+    this.stores.push(store);
+    
+    // Need to synchronize with a backlog of items to index, starting from the most recent
+     
+    var iterator = store.makeInterator();
+    // TODO: Need to make this a background process somehow as it could take a long time
+    while (iterator.hasNext()) {
+        var sha256 = iterator.next();
+        
+    }
 }
+*/
+
+IndexMemory.prototype.processItem = function(metadata, dataAsString) {
+    if (metadata.format === "application/json") {
+        // TODO: try/catch on parse
+        var item = JSON.parse(dataAsString);
+        if (item._type === "Triple") {
+            this.addTriple(item);
+        }
+    }
+};
 
 //TODO: Note that this approach depends on object keys maintaining their order, which is not guaranteed by the JS standards but most browsers support it
 //isObject and copyObjectWithSortedKeys are from Mirko Kiefer (with added semicolons):
 //https://raw.githubusercontent.com/mirkokiefer/canonical-json/master/index2.js
 function isObject(a) {
 	return Object.prototype.toString.call(a) === '[object Object]';
-};
+}
 function copyObjectWithSortedKeys(object) {
 	if (isObject(object)) {
 		var newObj = {};
@@ -39,7 +63,7 @@ function copyObjectWithSortedKeys(object) {
 	} else {
 		return object;
 	}
-};
+}
 function stringifyUsingCanonicalJSON(object) {
 	return JSON.stringify(copyObjectWithSortedKeys(object), null, 2);
 }
@@ -75,6 +99,7 @@ IndexMemory.prototype.addTriple = function(originalTriple) {
         bIndex.latestTriple = triple;
     }
     
+    // TODO: Optimize not to sort when item added at end is in order
     versions.sort(compareTriples);
 };
 
@@ -123,6 +148,6 @@ IndexMemory.prototype.findLatestC = function(a, b) {
     var indexEntries = this.getIndexEntries(a, b);
     if (!indexEntries || !indexEntries.latestTriple) return makeAlwaysSuccessfulPromise(null);
 	return makeAlwaysSuccessfulPromise(indexEntries.latestTriple.c);
-}
+};
 
 module.exports = IndexMemory; 

@@ -24,8 +24,10 @@ describe("Pointrel20151212 IndexMemory test", function() {
 	
 	var sha256OfTestObject1 = "08cdffa72235eee956662491d59483adba1fdda20888d5fbf69b54fa75e3b1ff";
 	
-	var store = new StoreMemory();
 	var index = new IndexMemory();
+	// index.trackStore(store);
+	
+	var store = new StoreMemory({}, index);
 	
 	it("stores a test object", function() {
 	    var promise = store.storeDataObject(testObject1);
@@ -37,7 +39,7 @@ describe("Pointrel20151212 IndexMemory test", function() {
 	
 	it("finds a test object from the index", function() {
 		// TODO: Need some kind of URI for triple...
-	    index.addTriple(testObject1);
+	    // index.addTriple(testObject1);
 	    var promise = index.findLatestC(testObject1.a, testObject1.b);
 	    return promise.then(function (result) {
 	        // console.log("sha256 of store test is", result);

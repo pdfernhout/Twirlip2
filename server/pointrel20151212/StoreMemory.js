@@ -27,12 +27,13 @@ function makeSkeinName() {
     return "skein-" + uuid4 + ".pces";
 }
 
-function StoreMemory(defaultMetadata) {
+function StoreMemory(defaultMetadata, index) {
     this.skeins = {};
     this.sha256ToSkeinAndPosition = {};
     this.defaultMetadata = defaultMetadata || {};
     this.currentSkeinName = null;
     this.allocateNewSkein();
+    this.index = index;
 }
 
 StoreMemory.prototype.allocateNewSkein = function() {
@@ -145,6 +146,12 @@ StoreMemory.prototype.storeDataString = function(dataAsString, extraMetadata, sk
     }
     
     if (debugLogging) console.log("storeDataString sha256", sha256);
+    
+    if (this.index) {
+        // TODO: try/catch
+        this.index.processItem(metadata, dataAsString);
+    }
+    
     return makeAlwaysSuccessfulPromise(sha256);
 };
 
@@ -237,5 +244,15 @@ StoreMemory.prototype.fetchDataString = function(sha256, options) {
 StoreMemory.prototype.fetchDataObject = function(sha256) {
     return this.fetchDataString(sha256, {returnOnlyData: true, parseJSON: true});
 };
-    
+
+/*
+StoreMemory.prototype.makeIterator = function() {
+    return Object.keys(this.skeins);
+};
+
+StoreMemory.prototype.next = function(iterator) {
+    return ???
+};
+*/
+
 module.exports = StoreMemory;
