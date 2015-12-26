@@ -285,6 +285,70 @@ Or even more concisely (assuming a very custom parser):
     
 Where acceptable abbreviations are p = purpose, h = SHA-256 hash, l = length, f = format, t = timestamp, a = author, and c = content.
 
+## Issues and limitations with storing data as triples
+
+Triple can be seen as having three fields (A, B, and C). 
+These three fields can point to strings, abstractions, or other triples.
+Triples also have a referenceable ID themselves (and so are "reified" as "first class" objects)
+
+Pointrel has always has the notion of an index of triples to quickly find matching triples and values.
+Specifically, seven indexes are ideally supported to return a time-ordered list (most recent first):
+
+* A
+* B
+* C
+* AB
+* AC
+* BC
+* ABC
+
+There is a tension between using triple as directed entity-attribute-value (ABC) definitions
+and using them to relate concepts semantically via directed or undirected relations.
+
+One big issue is that ABC triples are implicitly directed links in practical use defining current object state.
+When you look up As that have a BC use, you get a list of all As that have ever
+been linked via B to C. However, A may since have a new value of C via a later triple addition.
+So, one needs to be cautious in interpreting the meaning of some search results,
+including checking if A still have a value of C for B.
+So, for example, you might store "house1 color red" and then "house2 color red".
+Then, after some house painting, you might store "house1 color blue".
+If you query BC for all the "color red" house, you will bet back both house1 and house2.
+But house1 is now clue. The problem here is interpreting the BC index to mean
+that it is the current value. That index is instead telling you all houses
+that were recorded as ever having been red. You would still have to check each house
+separately (via the AB index) to see if it was still red. That second check
+might be an expensive one if there are thousands or millions of matches from the first one.
+You go from a single lookup to potentially an arbitrary N amount of lookups to make a current list
+of red houses. Still, as in practice you might lookup other information about the houses,
+if houses don't change color that often, the entire process of information display might not
+be that inefficient with an extra filtering step.
+
+Another issue is having lists. A simple way to make a set of chat messages on a channel
+could be to add triples of the example form "channel1 message contents1".
+You can then look up all matches for "channe1" and "message" via the AB index.
+However how do you "delete" a message from that set? You can't -- unless you reference the 
+defining triple via a reified reference to it and create a triple saying that triple is 
+now invalid or deleted. Looking up deletion triples for every triple referenced introduces a big overhead.
+A different approach is to make an explicit list object,
+and then store set items in it with a unique B (perhaps using a hash or random ID of the message)
+for each message. Then you could add a triple to set the C value to null.
+
+These indexes are also limited. You often may want to have a sorted list of objects based
+on more complex criterion, like sorting a message by priority, and then sending date, and then user.
+You can't do such complex sorts with the Pointrel core.
+You either need to sort the data yourself (what was always assumed early on)
+or you need to maintain additional custom application-specific indexes to do that.
+Such custom indexes would need to be updated for every triple added to the system.
+
+The support of such custom indexes is still an open question with limited implementation work done on it.
+Doing the sorting yourself works fine for small data sets (as with NarraFirma, which does sorting client-side).
+But if you had literally billions of messages, it is problematical to sort them in memory
+after retrieving them all into memory first, due to bandwidth and memory limitations.
+It would probably work better practically then to maintain indexes on disk.
+Those indexes might look a lot like a conventional SQL database,
+which would be essentially a cached version of some or all of a complete Pointrel triple store.
+Another option is a CouchDB-liek Map/Reduce approach to define indexes.
+
 ## Pointrel History
 
 As Paul realized much later, he might have had in his memory a cursory reading of part of William Kent's book "Data & Realty",
@@ -296,18 +360,40 @@ Paul originally wanted to build friendly AI systems or operating systems for suc
 Eventually, he moved more towards an Engelbart/Augment-emphasis on tools to empower individuals
 (including himself) to deal with their own data.
 
-Paul talked a lot about Pointrel with his undergraduate advisor, George A. Miller,
-who then launched WordNet as Paul was graduating in 1985
+The first two computer languages Paul learned (in his early teens) were 6502 Assembly (on a KIM-1) and BASIC (on TRS-80s, the PET, and a timesharing service).
+He learned about structured programming from seeing a lecture on Pascal at one of the first Trenton State computer fairs.
+But he really feels he learned to design software by using Forth, first on a Commodore VIC and then on a C64 (both Forths using HES Forth cartridges).
+The Forth notion of making code into small words stored in dictionaries would support two further interests.
+The first was a later affinity for Smalltalk which tends to be written in a Forth-like way of small methods.
+The second was Chuck Moore's Forth approach to having dictionaries of words that did stuff or stored stuff.
+Pointrel has a Forth-like flavor to its early history, both with Paul's interests in storing data
+in a structured way in dictionary-like structures defined by triples, and also an early interest
+in having code interwoven into all that like in a forth dictionary.
+Even before he coined the term "Pointrel", Paul was exploring ideas and writing code related to
+these Forth-like ideas of computer dictionaries of code, with the idea of a triple as a semantic generalization
+of Chuck Moore's Forth dictionary. 
+
+Another influence here had been parts-of-speech sentence diagraming
+in high school English and German classes, which Paul had always liked doing.
+Paul also read parts of an book on AI (Artificial Intelligence by Patrick Henry Winston) for a high school self-directed course.
+Along with a book on Pascal, that AI book was also acquired at that early Trenton State college computer fair.
+Another influence was reading the book "Brain" by Viktor Serebriakoff (founder of MENSA).
+Yet another influence was taking an advanced philosophy course on symbolic logic with Patrick Grim using a textbook by Copi at SUNY Stony Brook.
+
+Paul talked a lot about Pointrel with his undergraduate advisor at Princeton, George A. Miller.
+George then launched WordNet as Paul was graduating in 1985
 and as George was forced to retire as a professor at age 65 under then university regulations. 
-WordNet is its own system based on George's understanding of the lexicographic
-organization of part of the human mind, and George had previously had talks
-with Herbert Simon and Allen Newell about data representation.
+WordNet is its own computational linguistics system based on George's understanding of the lexicographic
+organization of part of the human mind. George had previously had talks
+with Herbert Simon and Allen Newell about data representation many years earlier.
 WordNet does not involve triples specifically, and WordNet is not a general system like Pointrel.
 However, WordNet does focus on semantic relationships between words (which can be modeled as triples);
 Before Paul started working with George, George was not writing any specific
-representational content or software. He was working towards understanding dictionaries
-better in conjunction with graduate students, in particular, one studying Le Petit Robert, a French dictionary).
-George's main focus then had been working towards helping kids learn language better or faster using videodisk systems
+representational content or software. He was working towards understanding human dictionaries
+better in conjunction with graduate students.
+In particular, one graduate student was studying Le Petit Robert, a French dictionary).
+George's main focus then had been working towards helping kids learn language better or faster,
+es[ecially using videodisk systems
 displaying scenes related to words (like showing a scene of a jungle along with the word "verdant").
 George told Paul that he was making WordNet in part
 to show people (including him) that a concept network was not enough by itself to do AI.
@@ -320,14 +406,15 @@ He says George was in general a good person and a good advisor.
 His point is more that Paul was an undergrad annoying George for a couple of years
 about semantic networks and the Pointrel system at the start,
 and so that may have indirectly prodded George to make great stuff in his own unique way.
-Wordnet in turn formed the basis of Simpli and then Google AdSense and so in turn spawned
-a huge industry (for good or bad).
+WordNet in turn formed the basis of Simpli and then Google AdSense and so in turn spawned
+a huge industry (for good or bad). But the roots there go back to Pointrel and even Forth.
 
 As Paul also wrote to the Open Virgle List ( http groups.google.com/group/openvirgle/msg/231e63e966e932df )
 he does feel his work at least very slightly help inspired Wordnet
 in the sense of his enthusiastically talking to George a lot about networks of
 concepts for AI he wanted to put on a hard disk for a Commodore PET using
-Pointrel triads. That hard disk had eaten a document (a speech for an upcoming trip he thinks) that George was writing in
+Pointrel "triads" (the term Paul used then instead of "triples").
+That hard disk had eaten a document (a speech for an upcoming trip Paul thinks) that George was writing in
 his office on a deadline. George was going to throw out the hard disk,
 he was so mad at it. But Paul asked for the hard disk to play with in the lab instead,
 and George let him have it. Paul says that file incident was the probably the only
@@ -338,20 +425,28 @@ But that experience is one reason Paul previously wrote to on young people bring
 and playfully experiment that people (including him) can lose with aging technical conservatism.
 As he wrote, being around young people can be inspiring in many ways that are not
 "plagiarism". Young people bring a hopefulness which can be infectious --
-even if in retrospect Paul says his plan to build a human level AI using a Commodore
+even if in retrospect Paul says his plan to build a human-level AI using a Commodore
 PET and an unreliable 10MB hard disk was absurd. George's brilliance lay in
 maybe later thinking, "What AI-ish thing can I build with all I know and the
 tools at hand?" He may well have done WordNet whether he had met Paul in his
-enthusiastic unreasonableness or not. Still, as an older Paul wrote,
-it is often the annoying seemingly ignorant questions of youth that make us old geezers think. :-)
+enthusiastic unreasonableness or not. As an older Paul wrote,
+"It is often the annoying seemingly ignorant questions of youth that make us old geezers think. :-)"
+Still, Paul is sad that he has not seen his Pointrel work and those early discussions with George ever
+acknowledged in the official WordNet history. By contrast, another professor then at Princeton,
+James Beniger, who Paul discussed various ideas with, acknowledged Paul's incidental contributions
+in the "The Control Revolution" (among those of many other people and influences on Jim's work).
+Still, we all have minds made of many ideas that have come together, and it can be hard
+to remember the origins of all of them, especially broader perspective-shifting ones
+which may sometimes even flow from seemingly unrelated comments or enthusiasms.
 
-One idea Paul got from George, beside much other good advice on life and psychology,
+Ideas flowed both ways though of course. One idea Paul got from George, beside much other good advice on life and psychology,
 was the notion of "free and open source". Paul has previously made money before Princeton
-writing a computer game for the Commodore VIC (which helped pay for Princeton).
+writing a computer game in 6502 Assembly for the Commodore VIC (which helped pay for Princeton).
 George went to great effort to get Princeton University to approve broad distribution
 of WordNet for free in a way that others could make derived works from it.
 That showed Paul another way to
 distribute ideas and technology besides commercial sales -- as free and open source content and software.
+This was a big contrast to a high school teacher Paul had worked for who emphasized selling software and content.
 George did not believe people should make their academic work proprietary and secret.
 That was very different than some other professors who turned their work into proprietary companies.
 George made a tremendous gift to the world
@@ -362,18 +457,32 @@ showing others how open source could be done in academia even with the Bayh–Do
 He also gave the gift of showing what was possible when you were "old" and forced to retire.
 WordNet has changed the landscape of the computer science field and industry.
 George's work on WordNet was funded by the intelligence community.
+He had said he got not get funding elsewhere like the NSF.
 His early work on communication had been funded by the Air Force.
+Paul can also be thankful to George for ways George was helpful to him.
 
 So, the underpinnings of Twirlip go back decades, before Google (Big Table itself
 is analogous to the Pointrel triplestore in some ways with row, column, and value mapping onto a timestamped triple), 
 and also before WordNet, all the way back to Pointrel.
+And even in a way, back to Chuck Moore's Forth (and maybe as below, perhaps William Kent).
+Along with other links (to Asimov, Winston, Serebriakoff, Grim, Copi, and more).
 
-Pointrel was originally meant to be data storage, a language, and applications.
+Pointrel was originally meant to be data storage, a language, and applications, like Forth.
 However, Paul abandoned the idea of writing his own language at some point in the 1990s.
 He still likes programming language design, and even wrote a version
 of Smalltalk that used triples to represent object data. But with the rise of Python,
 Squeak, and now JavaScript, it seems the world does not especially need or accept
 new languages. Good libraries for existing seem to get better broader adoption.
+
+Paul still likes Forth, but has come to realize that the single most important
+aspect of using a computer language is documenting the "intent" of the programmer;
+while Forth has many nice characteristics, it is weak on inherently documenting the intent
+of certain key aspects of the movement of data on the stack. You can document
+such intent in Forth with comments, but it is not an inherent part of the language
+compared to, say, C, Smalltalk, or Python when you do a simple assign, like "x = x + 10 * sin(1.0)".
+Forth is too flexible in a way. He still feels there remains potential there worth exploring though,
+including via new languages like Joy and so on (and he wrote a Forth in NewtonScript that explored some
+similar ground).
 
 When Linus Torvalds announced he wanted a new version control system,
 Paul thought about proposing Pointrel. He has versions that used an ENVY-like
@@ -399,13 +508,13 @@ Paul also watched the rise of RDF, SPARQL, and triple stores in the 2000s, and t
 So in that sense, Pointrel as a semantic triplestore has been both affirmed and passed by.
 
 But, as above, it is possible the Pointrel ideas are linked to William Kent's prior work,
-which Paul only rediscovered much later by chance seeing Kent's book 
+which Paul only (re?)discovered much later by chance seeing Kent's book 
 (perhaps not for the first time) in the Iowa State University library in the mid 1990s.
 Paul later corresponded with William Kent in the mid-2000s about data storage ideas, but by then
 Bill had moved on to other interests (like nature photography and broader writing) after what he called a nervous breakdown.
 Such breakdowns are probably always a risk when you spend a lot of time thinking hard about the nature of "Data and Reality". :-)
 Paul also learned about other Entity-Attribute-Value stores, like one by IBM and one in MUMPS.
-So, he can't claim those ideas are really "new". As his wife says,
+So, he can't claim those triple-ish ideas are really "new". As his wife says,
 great ideas are like whales, you may be lucky to swim alongside one for a time,
 but eventually it swims off on its own.
 
