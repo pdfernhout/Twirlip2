@@ -37,10 +37,11 @@ describe("Pointrel20151212 IndexMemory test", function() {
 	
 	it("finds a test object from the index", function() {
 		// TODO: Need some kind of URI for triple...
+	    index.addTriple(testObject1);
 	    var promise = index.findLatestC(testObject1.a, testObject1.b);
 	    return promise.then(function (result) {
 	        // console.log("sha256 of store test is", result);
-	        expect(result).to.equal(testObject1.c);   
+	        expect(result).to.deep.equal(testObject1.c);   
 	    });
 	});
 	

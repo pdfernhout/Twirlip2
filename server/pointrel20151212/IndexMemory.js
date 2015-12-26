@@ -1,3 +1,14 @@
+var Promise = require('promise');
+
+function makeAlwaysSuccessfulPromise(result) {
+    var promise = new Promise(function (resolve, reject) {
+        // reject("Unfinished");
+        resolve(result);
+    });
+    
+    return promise;
+}
+
 function IndexMemory() {
     this.stores = [];
     
@@ -109,7 +120,9 @@ IndexMemory.prototype.getIndexEntries = function(a, b) {
 };
 
 IndexMemory.prototype.findLatestC = function(a, b) {
-	
+    var indexEntries = this.getIndexEntries(a, b);
+    if (!indexEntries || !indexEntries.latestTriple) return makeAlwaysSuccessfulPromise(null);
+	return makeAlwaysSuccessfulPromise(indexEntries.latestTriple.c);
 }
 
 module.exports = IndexMemory; 
