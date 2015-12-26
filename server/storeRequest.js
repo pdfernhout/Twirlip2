@@ -19,6 +19,10 @@ function storeRequest(request, response) {
     
     if (requestedAction === "fetch") return doFetchAction(apiRequest, response);
 
+    if (requestedAction === "basketList") return doBasketListAction(apiRequest, response);
+
+    if (requestedAction === "sha256List") return doSHA256ListAction(apiRequest, response);
+
     // if (requestType === "addBasket") return doAddBasketAction(apiRequest, response);
 
     respond.fail(response, "Unsupported store api request: " + requestedAction);
@@ -61,6 +65,12 @@ function doFetchAction(apiRequest, response) {
     basket.fetchDataObject(sha256).then(function (result) {
         respond.success(response, {content: result});
     });
+}
+
+//TODO: Support multiple baskets in search
+function doBasketListAction(apiRequest, response) {
+    var basketNames = Object.keys(baskets);
+    respond.success(response, {basketNames: basketNames});
 }
 
 module.exports = storeRequest;
