@@ -64,7 +64,7 @@ app.post("/api/proxy", function (request, response) {
     proxyRequest(request, response);
 });
 
-app.post("/api/store", function (request, response) {
+app.post("/api/pointrel20151212/store", function (request, response) {
 	// TODO: Temporary one second delay for testing
 	// setTimeout(storeRequest.bind(this, request, response), 1000);
     storeRequest(request, response);

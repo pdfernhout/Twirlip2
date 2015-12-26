@@ -47,7 +47,7 @@ function updateBasketList(callback) {
 
     m.request({
         method: "POST", 
-        url: "/api/store", 
+        url: "/api/pointrel20151212/store", 
         data: {
             action: "basketList",
         }
@@ -72,7 +72,7 @@ function updateSHA256List(basketName, callback) {
     
     m.request({
         method: "POST", 
-        url: "/api/store", 
+        url: "/api/pointrel20151212/store", 
         data: {
             action: "sha256List",
             basket: basketName
@@ -95,7 +95,7 @@ function updateContentsForSHA256(sha256, callback) {
     
     m.request({
         method: "POST", 
-        url: "/api/store", 
+        url: "/api/pointrel20151212/store", 
         data: {
             action: "fetch",
             basket: currentBasketName,

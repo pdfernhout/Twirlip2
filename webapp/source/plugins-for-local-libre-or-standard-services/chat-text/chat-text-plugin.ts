@@ -43,7 +43,7 @@ function changeChannelClicked() {
     
     m.request({
         method: "POST", 
-        url: "/api/index", 
+        url: "/api/pointrel20151212/index", 
         data: {
             // index: "chat-index-get-all-messages-for-channel",
             index: "triples",
@@ -137,7 +137,7 @@ function sendMessage(message) {
     
     m.request({
         method: "POST", 
-        url: "/api/store", 
+        url: "/api/pointrel20151212/store", 
         data: {
             action: "store",
             content: {
