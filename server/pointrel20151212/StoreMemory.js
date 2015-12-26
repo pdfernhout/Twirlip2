@@ -148,8 +148,36 @@ StoreMemory.prototype.storeDataString = function(dataAsString, extraMetadata, sk
     return makeAlwaysSuccessfulPromise(sha256);
 };
 
+//TODO: Note that this approach depends on object keys maintaining their order, which is not guaranteed by the JS standards but most browsers support it
+//isObject and copyObjectWithSortedKeys are from Mirko Kiefer (with added semicolons):
+//https://raw.githubusercontent.com/mirkokiefer/canonical-json/master/index2.js
+function isObject(a) {
+	return Object.prototype.toString.call(a) === '[object Object]';
+};
+function copyObjectWithSortedKeys(object) {
+	if (isObject(object)) {
+		var newObj = {};
+		var keysSorted = Object.keys(object).sort();
+		var key;
+		for (var i = 0, len = keysSorted.length; i < len; i++) {
+			key = keysSorted[i];
+			newObj[key] = copyObjectWithSortedKeys(object[key]);
+		}
+		return newObj;
+	} else if (Array.isArray(object)) {
+		return object.map(copyObjectWithSortedKeys);
+	} else {
+		return object;
+	}
+};
+function stringifyUsingCanonicalJSON(object) {
+	return JSON.stringify(copyObjectWithSortedKeys(object), null, 2);
+}
+
 StoreMemory.prototype.storeDataObject = function(data, extraMetadata, skipDuplicates) {
-    var dataAsString = JSON.stringify(data, null, 2);
+	// TODO: Perhaps not really essential to sort here? But may need to sort for Triple Store
+    // var dataAsString = stringifyUsingCanonicalJSON(data);
+	var dataAsString = JSON.stringify(data, null, 2);
     if (!extraMetadata) extraMetadata = {};
     extraMetadata.format = "application/json";
     return this.storeDataString(dataAsString, extraMetadata, skipDuplicates);
