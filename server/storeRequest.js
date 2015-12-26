@@ -67,10 +67,20 @@ function doFetchAction(apiRequest, response) {
     });
 }
 
-//TODO: Support multiple baskets in search
 function doBasketListAction(apiRequest, response) {
     var basketNames = Object.keys(baskets);
     respond.success(response, {basketNames: basketNames});
+}
+
+function doSHA256ListAction(apiRequest, response) {
+    var basketName = apiRequest.basket;
+    if (respond.failIfUndefined(response, basketName, "basket")) return;
+    
+    var basket = baskets[basketName];
+    if (!basket) return respond.fail(response, "No such basket: " + basketName);
+    
+    respond.success(response, {sha256List: Object.keys(basket.sha256ToSkeinAndPosition)});
+    
 }
 
 module.exports = storeRequest;
