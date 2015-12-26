@@ -5,7 +5,8 @@ import m = require("mithril");
 var currentChannel = "test";
 var channelChangeInProgress = false;
 var currentMessages = [];
-var currentMessage = ""
+var currentMessage = "";
+var currentUser = "test@example.com";
 
 export function initialize() {
     // TODO: Somehow get a list of relevant messages out of all the ones out there now or later
@@ -111,6 +112,8 @@ function sendMessageClicked() {
     console.log("sendMessageClicked", currentMessage);
     var newMessage = {
         text: currentMessage,
+        timestamp: new Date().toISOString,
+        sender: currentUser,
         status: "prepared",
         sha256: null
     };
@@ -128,7 +131,23 @@ function sendMessage(message) {
         url: "/api/store", 
         data: {
             action: "store",
-            content: message.text,
+            content: {
+                _type: "Triple",
+                timestamp: message.timestamp,
+                sender: currentUser,
+                a: {
+                    _type: "Channel",
+                    channelName: currentChannel
+                },
+                b: "containsMessage",
+                c: {
+                    _type: "ChatMessage",
+                    timestamp: message.timestamp,
+                    sender: message.sender,
+                    channelName: currentChannel,
+                    content: message.text
+                }
+            },
             basket: "test"
         }
     }).then((result: any) => {
