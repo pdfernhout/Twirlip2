@@ -47,8 +47,10 @@ function changeChannelClicked() {
         data: {
             // index: "chat-index-get-all-messages-for-channel",
             index: "triples",
-            a: {purpose: "ChatChannel", content: currentChannel},
+            a: pointerForCurrentChannel(),
             // a: "pointrel:ChatChannel:" + currentChannel
+            b: "containsMessage",
+            // TODO: Ignore deleted
             limit: 100,
             // sorted by latest to earliest by default
             // channel: currentChannel,
@@ -123,6 +125,13 @@ function sendMessageClicked() {
     sendMessage(newMessage);
 }
 
+function pointerForCurrentChannel() {
+    return {
+        _type: "ChatChannel",
+        channelName: currentChannel
+    };
+}
+
 function sendMessage(message) {
     message.status = "pending";
     
@@ -135,10 +144,7 @@ function sendMessage(message) {
                 _type: "Triple",
                 timestamp: message.timestamp,
                 sender: currentUser,
-                a: {
-                    _type: "Channel",
-                    channelName: currentChannel
-                },
+                a: pointerForCurrentChannel(),
                 b: "containsMessage",
                 c: {
                     _type: "ChatMessage",
