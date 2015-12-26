@@ -150,4 +150,10 @@ IndexMemory.prototype.findLatestC = function(a, b) {
 	return makeAlwaysSuccessfulPromise(indexEntries.latestTriple.c);
 };
 
+IndexMemory.prototype.findAllC = function(a, b) {
+    var indexEntries = this.getIndexEntries(a, b);
+    if (!indexEntries || !indexEntries.latestTriple) return makeAlwaysSuccessfulPromise([]);
+    return makeAlwaysSuccessfulPromise(indexEntries.versions || []);
+};
+
 module.exports = IndexMemory; 

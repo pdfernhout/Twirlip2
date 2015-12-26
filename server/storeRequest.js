@@ -1,5 +1,6 @@
 var respond = require("./respond");
 var StoreMemory = require("./pointrel20151212/StoreMemory");
+var IndexMemory = require("./pointrel20151212/IndexMemory");
 
 // Retrieve the requested stored resource 
 // Such resources may contain unsafe data depending on their source
@@ -22,6 +23,10 @@ function storeRequest(request, response) {
     if (requestedAction === "basketList") return doBasketListAction(apiRequest, response);
 
     if (requestedAction === "sha256List") return doSHA256ListAction(apiRequest, response);
+    
+    if (requestedAction === "index/latestC") return doIndexLastestC(apiRequest, response);
+    
+    if (requestedAction === "index/allC") return doIndexAllC(apiRequest, response);
 
     // if (requestType === "addBasket") return doAddBasketAction(apiRequest, response);
 
@@ -42,7 +47,8 @@ function doStoreAction(apiRequest, response) {
 
     var basket = baskets[basketName];
     if (!basket) {
-        basket = new StoreMemory();
+        var index = new IndexMemory();
+        basket = new StoreMemory({}, index);
         baskets[basketName] = basket;
     }
     
@@ -81,6 +87,46 @@ function doSHA256ListAction(apiRequest, response) {
     
     respond.success(response, {sha256List: Object.keys(basket.sha256ToSkeinAndPosition)});
     
+}
+
+// TODO: Support multiple baskets in search
+function doIndexLastestC(apiRequest, response) {
+    var a = apiRequest.a;
+    if (respond.failIfUndefined(response, a, "a")) return;
+    
+    var b = apiRequest.b;
+    if (respond.failIfUndefined(response, b, "b")) return;
+    
+    var basketName = apiRequest.basket;
+    if (respond.failIfUndefined(response, basketName, "basket")) return;
+    
+    var basket = baskets[basketName];
+    if (!basket) return respond.fail(response, "No such basket: " + basketName);
+    
+    basket.index.findLatestC(a, b).then(function (result) {
+        respond.success(response, {c: result});
+    });
+}
+
+// TODO: Support multiple baskets in search
+// TODO: Support limit and continuatio
+function doIndexAllC(apiRequest, response) {
+    var a = apiRequest.a;
+    if (respond.failIfUndefined(response, a, "a")) return;
+    
+    var b = apiRequest.b;
+    if (respond.failIfUndefined(response, b, "b")) return;
+    
+    var basketName = apiRequest.basket;
+    if (respond.failIfUndefined(response, basketName, "basket")) return;
+    
+    var basket = baskets[basketName];
+    if (!basket) return respond.fail(response, "No such basket: " + basketName);
+    
+    // TODO: Automatically remove all deleted items unless a flag says to keep them
+    basket.index.findAllC(a, b).then(function (result) {
+        respond.success(response, {allC: result});
+    });
 }
 
 module.exports = storeRequest;
