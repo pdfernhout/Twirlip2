@@ -22,7 +22,7 @@ function displayChatChannel() {
             value: currentChannel,
             onchange: m.withAttr("value", currentChannelChanged), 
             onkeyup: inputKeyPress.bind(null, changeChannelClicked),
-            size: "80"
+            size: "30"
         }),
         m("button", {onclick: changeChannelClicked}, "Change channel")
     ]
@@ -43,10 +43,10 @@ function changeChannelClicked() {
     
     m.request({
         method: "POST", 
-        url: "/api/pointrel20151212/index", 
+        url: "/api/pointrel20151212/store", 
         data: {
             // index: "chat-index-get-all-messages-for-channel",
-            index: "triples",
+            action: "index/allC",
             a: pointerForCurrentChannel(),
             // a: "pointrel:ChatChannel:" + currentChannel
             b: "containsMessage",
@@ -73,6 +73,20 @@ function changeChannelClicked() {
             // TODO: load message list from result
             // TODO: Should all the messages be replaced or just some?
             currentMessages = [];
+            result.allC.map((triple) => {
+                var message = triple.c;
+                var restoredMessage = {
+                    text: message.content,
+                    timestamp: message.timestamp,
+                    sender: message.sender,
+                    status: "stored",
+                    sha256: "TODO ????"
+                };
+                currentMessages.push(restoredMessage);
+            });
+            currentMessages.sort(function (a, b) {
+                return a.timestamp.localeCompare(b.timestamp);
+            });
         } else {
             console.log("channel messages load failed");
         }
@@ -114,7 +128,7 @@ function sendMessageClicked() {
     console.log("sendMessageClicked", currentMessage);
     var newMessage = {
         text: currentMessage,
-        timestamp: new Date().toISOString,
+        timestamp: new Date().toISOString(),
         sender: currentUser,
         status: "prepared",
         sha256: null
@@ -173,7 +187,7 @@ function currentMessageChanged(message) {
     currentMessage = message;
 }
 
-function inputKeyPress(event, callback) {
+function inputKeyPress(callback, event) {
     var keycode = event.keycode || event.which || 0;
     // console.log("inputKeyPress", keycode);
     if (keycode === 13) {
