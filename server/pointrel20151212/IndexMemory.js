@@ -107,6 +107,7 @@ function compareTriples(t1, t2) {
 	if (t1.timestamp < t2.timestamp) return -1;
 	if (t1.timestamp > t2.timestamp) return 1;
 	
+	// TODO: Pass in sha256 and use that instead for conflict resolution for equal timestamps
 	// Consider other fields when timestamps are equal to have consistent ordering; this should be rare
 	
 	var a1 = JSON.stringify(t1.a);
