@@ -1,6 +1,7 @@
 "use strict";
 
 import m = require("mithril");
+import sanitizeHTML = require("../../sanitizeHTML");
 
 var currentChannel = "test";
 var channelChangeInProgress = false;
@@ -117,7 +118,7 @@ function displayChatLog() {
         "Chat log:", m("br"),
         currentMessages.map((message) => {
             return m("div.message", [
-                message.text,
+                sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(m, DOMParser, message.text, {allowLinks: true, allowImages: true}),
                 displayMessageStatus(message)
             ]);
         })
