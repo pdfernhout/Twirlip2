@@ -199,15 +199,17 @@ function inputKeyPress(callback, event) {
 }
     
 function displayChatEntry() {
-    return m("div", [
-        "Message:",
-        m("input", {
+    return m("div",
+    [
+        "Compose:", m("br"),
+        m("textarea", {
             value: currentMessage,
             onchange: m.withAttr("value", currentMessageChanged), 
-            onkeyup: inputKeyPress.bind(null, sendMessageClicked),
+            // onkeyup: inputKeyPress.bind(null, sendMessageClicked),
+            disabled: !!channelChangeInProgress,
             size: "80"
-        }),
-        m("button", {onclick: sendMessageClicked}, "Send")
+        }),m("br"),
+        m("button", {onclick: sendMessageClicked, disabled: !!channelChangeInProgress}, "Send")
     ]
     );
 }
@@ -217,9 +219,8 @@ export function display() {
         m("hr"),
         m("strong", "Chat Text plugin"), m("br"),
         displayChatChannel(),
-        channelChangeInProgress ? "Channel change in progress..." : [
-            displayChatLog(),
-            displayChatEntry()
-        ]
+        channelChangeInProgress ? "Channel change in progress..." : "",
+        displayChatLog(),
+        displayChatEntry()
     ]);
 }
