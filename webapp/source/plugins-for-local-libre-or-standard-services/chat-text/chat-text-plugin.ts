@@ -9,11 +9,39 @@ var currentMessages = [];
 var currentMessage = "";
 var currentUser = "test@example.com";
 
+var polling = false;
+var pollingTimeout = null;
+
 export function initialize() {
     // TODO: Somehow get a list of relevant messages out of all the ones out there now or later
-    // changeChannelClicked();
+    changeChannelClicked();
     
     console.log("Chat Text plugin initialized");
+}
+
+function setPoll(value) {
+    polling = value;
+    
+    if (!polling && pollingTimeout) {
+        clearTimeout(pollingTimeout);
+        pollingTimeout = null;
+        console.log("stop polling for chat messages");
+        return;
+    }
+    
+    if (!pollingTimeout) {
+        pollingTimeout = setTimeout(poll, 5000);
+        console.log("start polling for chat messages");
+    }
+}
+
+function poll() {
+    console.log("polling");
+    pollingTimeout = null;
+    
+    changeChannelClicked(() => {
+        pollingTimeout = setTimeout(poll, 5000);
+    });
 }
 
 function displayChatChannel() {
@@ -22,10 +50,10 @@ function displayChatChannel() {
         m("input", {
             value: currentChannel,
             onchange: m.withAttr("value", currentChannelChanged), 
-            onkeyup: inputKeyPress.bind(null, changeChannelClicked),
+            onkeyup: inputKeyPress.bind(null, changeChannelClicked.bind(null, null)),
             size: "30"
         }),
-        m("button", {onclick: changeChannelClicked}, "Change channel")
+        m("button", {onclick: changeChannelClicked.bind(null, null)}, "Change channel")
     ]
     );
 }
@@ -34,12 +62,11 @@ function currentChannelChanged(channel) {
     currentChannel = channel;
 }
 
-function changeChannelClicked() {
+function changeChannelClicked(callback = null, event = null) {
     console.log("changeChannelClicked", changeChannelClicked);
     // TODO: Somehow get a list of relevant messages out of all the ones out there
     // TODO: Then somehow track any new messages on that channel from others
     
-    currentMessages = [];
     channelChangeInProgress = true;
     
     m.request({
@@ -89,8 +116,10 @@ function changeChannelClicked() {
                 return a.timestamp.localeCompare(b.timestamp);
             });
         } else {
+            currentMessages = [];
             console.log("channel messages load failed");
         }
+        if (callback) callback();
     }, (error) => {
         console.log("api index error", error);
     });
@@ -135,7 +164,8 @@ function sendMessageClicked() {
         sha256: null
     };
     currentMessages.push(newMessage);
-    currentMessage = ""
+    currentMessage = "";
+    (<any>document.getElementById("chatEntryTextArea")).value = currentMessage;
     
     sendMessage(newMessage);
 }
@@ -204,7 +234,8 @@ function displayChatEntry() {
     [
         "Compose:", m("br"),
         m("textarea", {
-            value: currentMessage,
+            id: "chatEntryTextArea",
+            // value: currentMessage,
             onchange: m.withAttr("value", currentMessageChanged), 
             // onkeyup: inputKeyPress.bind(null, sendMessageClicked),
             disabled: !!channelChangeInProgress,
@@ -219,6 +250,8 @@ export function display() {
     return m("div.chatTextPlugin", [
         m("hr"),
         m("strong", "Chat Text plugin"), m("br"),
+        m("input[type=checkbox]", {onclick: m.withAttr("checked", setPoll), checked: polling}),
+        "Poll for new messages every five seconds", m("br"),
         displayChatChannel(),
         channelChangeInProgress ? "Channel change in progress..." : "",
         displayChatLog(),
