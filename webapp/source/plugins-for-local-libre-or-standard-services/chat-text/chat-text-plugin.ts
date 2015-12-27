@@ -258,9 +258,10 @@ export function display() {
         m("hr"),
         m("strong", "Chat Text plugin"), m("br"),
         m("input[type=checkbox]", {onclick: m.withAttr("checked", setPoll), checked: polling}),
-        "Poll for new messages every five seconds", m("br"),
+        "Poll for new messages every five seconds", 
+        channelChangeInProgress ? " [Polling or Channel change in progress...]" : "",
+        m("br"),
         displayChatChannel(),
-        channelChangeInProgress ? "Channel change in progress..." : "",
         displayChatLog(),
         displayChatEntry()
     ]);
