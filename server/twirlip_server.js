@@ -90,7 +90,7 @@ app.use("/", function (request, response) {
 
 var server = http.createServer(app);
 
-server.listen(9000, "127.0.0.1", function () {
+server.listen(9000, function () {
     var host = server.address().address;
     var port = server.address().port;
     applicationLog(util.format("Twirlip server listening at http://%s:%s", host, port));
