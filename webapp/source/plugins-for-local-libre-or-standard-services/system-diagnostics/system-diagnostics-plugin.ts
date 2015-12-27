@@ -33,6 +33,13 @@ function poll() {
     console.log("polling");
     pollingTimeout = null;
     
+    // Do not poll if the document is not visible
+    if (document.hidden === true) {
+        // console.log("poll: not polling because not visible");
+        pollingTimeout = setTimeout(poll, 5000);
+        return;
+    }
+    
     updateBasketList(() => {
         pollingTimeout = setTimeout(poll, 5000);
     });
