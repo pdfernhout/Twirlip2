@@ -2,7 +2,8 @@ Goal: This is for testing the text chat plugin manually.
 
 Component: Text chat
 
-Setup: Use the "test" channel.
+Setup: Use the default "test" channel in the Text chat plugin, or you can enter any other new channel in the "Channel" text input
+as with "test-{whatever-you-want-goes-here}" if you want a clean slate for re-testing and press "Change channel".
 
 Procedure: 
 Enter the following items (each separated by ---) into the text chat window "Compose" text area.
