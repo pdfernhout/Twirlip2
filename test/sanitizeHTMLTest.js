@@ -24,6 +24,12 @@ describe("sanitizeHTML strict test", function() {
         expect(result).to.deep.equal([{"tag":"span","attrs":{},"children":[]}]);
     });
     
+    it("fails on an image with width and height", function() {
+        var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(mithril, '<img src="http://www.kurtz-fernhout.com/kfs_cornerpicture.jpg" width="80" height="64"></img>');
+        // console.log("result", JSON.stringify(result, null, 2));
+        expect(result).to.deep.equal([ { tag: 'span', attrs: {}, children: [] } ]);
+    });
+    
     it("fails on a script tag", function() {
         var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(mithril, '<script>alert("hello from JavaScript");</script>');
         // console.log("result", JSON.stringify(result, null, 2));
@@ -49,6 +55,18 @@ describe("sanitizeHTML with parameters test", function() {
         var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(mithril, DOMParser, '<div class="narrafirma-special-warning">hello</div>');
         // console.log("result", JSON.stringify(result, null, 2));
         expect(result).to.deep.equal([ { tag: 'div', attrs: {"class": "narrafirma-special-warning"}, children: [ 'hello' ] } ]);
+    });
+    
+    it("processes an image with width and height", function() {
+        var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(mithril, DOMParser, '<img src="http://www.kurtz-fernhout.com/kfs_cornerpicture.jpg" width="80" height="64"></img>', {allowImages: true});
+        // console.log("result", JSON.stringify(result, null, 2));
+        expect(result).to.deep.equal([ { tag: 'img', attrs: {"src": "http://www.kurtz-fernhout.com/kfs_cornerpicture.jpg", width: 80, height: 64}, children: [] } ]);
+    });
+    
+    it("fails on an image with width and height without configuration", function() {
+        var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(mithril, DOMParser, '<img src="http://www.kurtz-fernhout.com/kfs_cornerpicture.jpg" width="80" height="64"></img>', {});
+        // console.log("result", JSON.stringify(result, null, 2));
+        expect(result).to.deep.equal([ { tag: 'span', attrs: {}, children: [] } ]);
     });
     
     it("fails on a script tag", function() {

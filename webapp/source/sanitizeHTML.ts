@@ -90,7 +90,7 @@ function generateVDOM(nodes: NodeList, configuration) {
                 var tagName = node.tagName.toLowerCase();
                 
                 // console.log("element", node);
-                if (!isTagAllowed(tagName, configuration.allowLinks)) {
+                if (!isTagAllowed(tagName, configuration)) {
                     if (debugLogging) console.log("disallowed tag", tagName);
                     tagName = "span";
                 }
