@@ -5,6 +5,8 @@
 // A css class (from a short approved list) can be set on a tag using a ".className" after the opening tag name.
 // For example: <span.narrafirma-special-warning>Warning!!!<span>
 
+var debugLogging = false;
+
 // 1 is normal tag that needs to be closed; 2 is self-closing tag (br and hr)
 var allowedHTMLTags = {
     // a: 1,
@@ -63,6 +65,16 @@ function isURLAcceptable(url) {
     return url.substring(0, 5) === "http:" || url.substring(0, 6) === "https";
 }
 
+function isTagAllowed(tagName, configuration) {
+    if (allowedHTMLTags[tagName]) return true;
+    
+    if (!configuration) configuration = {};
+    
+    if (tagName === "a" && configuration.allowLinks) return true;
+    if (tagName === "img" && configuration.allowImages) return true;
+    return false;
+}
+
 function generateVDOM(nodes: NodeList, configuration) {
     if (!nodes) return [];
     // console.log("generateVDOM nodes length", nodes.length);
@@ -78,11 +90,8 @@ function generateVDOM(nodes: NodeList, configuration) {
                 var tagName = node.tagName.toLowerCase();
                 
                 // console.log("element", node);
-                if (!allowedHTMLTags[tagName] &&
-                    ((tagName === "a" && !configuration.allowLinks) ||
-                    (tagName === "img" && !configuration.allowImages))
-                ) {
-                    console.log("disallowed tag", tagName);
+                if (!isTagAllowed(tagName, configuration.allowLinks)) {
+                    if (debugLogging) console.log("disallowed tag", tagName);
                     tagName = "span";
                 }
                 
@@ -95,7 +104,7 @@ function generateVDOM(nodes: NodeList, configuration) {
                         if (theClassOrClasses in allowedCSSClasses) {
                             attributes["class"] = theClassOrClasses;
                         } else {
-                            console.log("WARN: CSS class not allowed", theClassOrClasses);
+                            if (debugLogging) console.log("WARN: CSS class not allowed", theClassOrClasses);
                         }
                     }
                     if (configuration.allowLinks && attribute.name === "href") {
@@ -237,7 +246,7 @@ export function generateSanitizedHTMLForMithrilWithoutAttributes(mithril, html) 
                 
                 var closedTag = html.substring(pos - 1, pos) === "/";
                 
-                console.log("tagName", tagName, closedTag);
+                // console.log("tagName", tagName, closedTag);
                 
                 // Special support for Mithril-like class names inline with tags
                 var cssClass;

@@ -14,14 +14,20 @@ describe("sanitizeHTML strict test", function() {
     
     it("uses span for an image", function() {
         var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(mithril, '<img src="trouble"></img>');
-        console.log("result", JSON.stringify(result));
+        // console.log("result", JSON.stringify(result));
         expect(result).to.deep.equal([{"tag":"span","attrs":{},"children":[]}]);
     });
  
     it("handles closed image", function() {
         var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(mithril, '<img />');
-        console.log("result", JSON.stringify(result));
+        // console.log("result", JSON.stringify(result));
         expect(result).to.deep.equal([{"tag":"span","attrs":{},"children":[]}]);
+    });
+    
+    it("fails on a script tag", function() {
+        var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithoutAttributes(mithril, '<script>alert("hello from JavaScript");</script>');
+        // console.log("result", JSON.stringify(result, null, 2));
+        expect(result).to.deep.equal([ { tag: 'span', attrs: {}, children: [ 'alert("hello from JavaScript");' ] } ]);
     });
 });
     
@@ -45,6 +51,11 @@ describe("sanitizeHTML with parameters test", function() {
         expect(result).to.deep.equal([ { tag: 'div', attrs: {"class": "narrafirma-special-warning"}, children: [ 'hello' ] } ]);
     });
     
+    it("fails on a script tag", function() {
+        var result = sanitizeHTML.generateSanitizedHTMLForMithrilWithAttributes(mithril, DOMParser, '<script>alert("hello from JavaScript");</script>');
+        // console.log("result", JSON.stringify(result, null, 2));
+        expect(result).to.deep.equal([ { tag: 'span', attrs: {}, children: [ 'alert("hello from JavaScript");' ] } ]);
+    });
 });
 
 
