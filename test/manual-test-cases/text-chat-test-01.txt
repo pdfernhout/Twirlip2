@@ -1,0 +1,29 @@
+Goal: This is for testing the text chat plugin manually.
+
+Component: Text chat
+
+Setup: Use the "test" channel.
+
+Procedure: 
+Enter the following items (each separated by ---) into the text chat window "Compose" text area.
+Press "Send" after each one.
+
+Expected behavior: Related text and and image should appear in the chat log.
+
+---
+Hi David!
+---
+Here is an image: <img src="http://www.kurtz-fernhout.com/kfs_cornerpicture.jpg" width=80 height=64></img>
+---
+That was done using:<br>
+<pre>
+Here is an image: &lt;img src=&quot;http://www.kurtz-fernhout.com/kfs_cornerpicture.jpg&quot; width=80 height=64&gt;&lt;/img&gt;
+</pre>
+---
+You can add a limited subset of HTML.
+---
+But you can't use scripts:<br>
+<script>alert("hello from JavaScript!");</script>
+---
+The script should have been turned into a "span" tag.
+---
