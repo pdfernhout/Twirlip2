@@ -81,6 +81,7 @@ declare module _mithril {
 		className?: string;
 		class?: string;
 		config?: MithrilElementConfig;
+		[propName: string]: any;
 	}
 
 	// Defines the subset of Event that Mithril needs
