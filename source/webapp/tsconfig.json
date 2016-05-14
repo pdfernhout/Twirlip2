@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "rootDir": "./source",  
+        "rootDir": "./ts",  
         "target": "es5",
         "module": "amd",
         "declaration": false,
