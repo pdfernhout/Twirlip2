@@ -1,1 +1,1 @@
-Generated js files fo here
+Generated js files go here
