@@ -7,22 +7,22 @@ var testDelay_ms = 0;
 
 // Standard nodejs modules
 
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
-var util = require('util');
+import fs = require('fs');
+import http = require('http');
+import https = require('https');
+import util = require('util');
 
 // The modules below require npm installation
-var express = require('express');
-var bodyParser = require('body-parser');
+import express = require('express');
+import bodyParser = require('body-parser');
 
 // Support
-var proxyRequest = require('./proxyRequest');
-var storeRequest = require('./storeRequest');
+import proxyRequest = require('./proxyRequest');
+import storeRequest = require('./storeRequest');
 
 // Main code
 
-function applicationLog() {
+function applicationLog(...args) {
     var newArguments = [new Date().toISOString()].concat(Array.prototype.slice.call(arguments));
     console.log.apply(console, newArguments);
 }
@@ -74,7 +74,7 @@ app.use("/$", function(req, res) {
     res.redirect('/twirlip.html');
 });
 
-app.use("/", express.static(__dirname + "/../webapp"));
+app.use("/", express.static(__dirname + "/../../webapp"));
 
 app.use(function(err, req, res, next){
     console.error(err.stack);
@@ -88,7 +88,7 @@ app.use("/", function (request, response) {
 });
 */
 
-var server = http.createServer(app);
+var server: any = http.createServer(app);
 
 server.listen(9000, function () {
     var host = server.address().address;

@@ -1,5 +1,5 @@
-var requestAPI = require('request');
-var respond = require("./respond");
+import requestAPI = require('request');
+import respond = require("./respond");
 
 // TODO: Retrieve the requested web resource -- very unsafe:
 // TODO: user should be authenticated and trusted or requests should be restricted to local ones
@@ -32,4 +32,4 @@ function proxyRequest(request, response) {
 	}
 }
 
-module.exports = proxyRequest;
+export = proxyRequest;

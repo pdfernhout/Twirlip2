@@ -1,0 +1,11 @@
+{
+  "ambientDependencies": {
+    "body-parser": "registry:dt/body-parser#0.0.0+20160317120654",
+    "node": "registry:dt/node#4.0.0+20160509154515",
+    "promise": "registry:dt/promise#7.1.1+20160316171810"
+  },
+  "dependencies": {
+    "node-uuid": "registry:npm/node-uuid#1.4.7+20160503013124",
+    "request": "registry:npm/request#2.69.0+20160428223725"
+  }
+}

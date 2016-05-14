@@ -1,6 +1,17 @@
 // Routines to return standardized responses
 
-function success(response, extra) {
+import Promise = require('promise');
+
+export function makeAlwaysSuccessfulPromise(result) {
+    var promise = new Promise(function (resolve, reject) {
+        // reject("Unfinished");
+        resolve(result);
+    });
+    
+    return promise;
+}
+
+export function success(response, extra) {
     var result = {
         success: true,
         status: "OK",
@@ -16,7 +27,7 @@ function success(response, extra) {
     return true;
 }
 
-function fail(response, errorMessage) {
+export function fail(response, errorMessage) {
     response.json({
         success : false,
         status: "failed",
@@ -25,12 +36,8 @@ function fail(response, errorMessage) {
     return true;
 }
 
-function failIfUndefined(response, field, fieldName) {
+export function failIfUndefined(response, field, fieldName) {
     if (field !== undefined) return false;
     fail(response, fieldName + " is undefined");
     return true;
 }
-
-exports.success = success;
-exports.fail = fail;
-exports.failIfUndefined = failIfUndefined;

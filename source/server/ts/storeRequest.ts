@@ -1,11 +1,10 @@
-var respond = require("./respond");
-var StoreMemory = require("./pointrel20151212/StoreMemory");
-var IndexMemory = require("./pointrel20151212/IndexMemory");
+import respond = require("./respond");
+import StoreMemory = require("./pointrel20151212/StoreMemory");
+import IndexMemory = require("./pointrel20151212/IndexMemory");
 
 // Retrieve the requested stored resource 
 // Such resources may contain unsafe data depending on their source
-
-function storeRequest(request, response) {
+ function storeRequest(request, response): any {
     var apiRequest = request.body;
     
     console.log("storeRequest", apiRequest);
@@ -129,4 +128,4 @@ function doIndexAllC(apiRequest, response) {
     });
 }
 
-module.exports = storeRequest;
+export = storeRequest;

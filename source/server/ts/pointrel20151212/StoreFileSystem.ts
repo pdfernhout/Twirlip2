@@ -2,24 +2,16 @@
 
 // TODO: Remove duplication with StoreMemory
 
-var fs = require("fs");
+import fs = require("fs");
 
-var Promise = require('promise');
-var crypto = require('crypto');
-var uuid = require('node-uuid');
+import crypto = require('crypto');
+import uuid = require('node-uuid');
+
+import { makeAlwaysSuccessfulPromise } from "../respond";
 
 var maxShardLength = 4096000;
 
 var debugLogging = false;
-
-function makeAlwaysSuccessfulPromise(result) {
-    var promise = new Promise(function (resolve, reject) {
-        // reject("Unfinished");
-        resolve(result);
-    });
-    
-    return promise;
-}
 
 function makeShardName() {
 	var uuid4 = uuid.v4();
@@ -27,7 +19,7 @@ function makeShardName() {
 }
 
 function StoreFileSystem(storageDirectory, defaultMetadata) {
-	this.storageDirectory = storageDirectory;
+    this.storageDirectory = storageDirectory;
     this.shards = {};
     this.sha256ToShardAndPosition = {};
     this.defaultMetadata = defaultMetadata || {};
@@ -97,5 +89,5 @@ StoreFileSystem.prototype.fetch = function(sha256) {
     // console.log("retrieved result", result);
     return makeAlwaysSuccessfulPromise(result);
 };
-    
-module.exports = StoreFileSystem;
+
+export = StoreFileSystem;

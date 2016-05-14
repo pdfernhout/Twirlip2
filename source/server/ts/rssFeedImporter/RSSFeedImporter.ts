@@ -1,4 +1,4 @@
-var parser = require('blindparser');
+import parser = require('blindparser');
  
 // var url = 'http://rss.cnn.com/rss/cnn_topstories.rss';
 // var url = 'http://portland.craigslist.org/sof/index.rss';

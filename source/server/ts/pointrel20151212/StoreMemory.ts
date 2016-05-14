@@ -1,8 +1,9 @@
 // Pointrel20151212 store module to store immutable data in memory
 
-var Promise = require('promise');
-var crypto = require('crypto');
-var uuid = require('node-uuid');
+import crypto = require('crypto');
+import uuid = require('node-uuid');
+
+import { makeAlwaysSuccessfulPromise } from "../respond";
 
 var maxSkeinLength = 4096000;
 // TODO: Use this in storeDataString for less memory allocation: var sharedOutputBuffer = new Buffer(maxSkeinLength);
@@ -12,15 +13,6 @@ var itemPrefix = "@@@PCE ";
 var maximumLengthOfAreaIncludingPrefixAndLengths = 64;
 
 var debugLogging = false;
-
-function makeAlwaysSuccessfulPromise(result) {
-    var promise = new Promise(function (resolve, reject) {
-        // reject("Unfinished");
-        resolve(result);
-    });
-    
-    return promise;
-}
 
 function makeSkeinName() {
 	var uuid4 = uuid.v4();
@@ -255,4 +247,4 @@ StoreMemory.prototype.next = function(iterator) {
 };
 */
 
-module.exports = StoreMemory;
+export = StoreMemory;

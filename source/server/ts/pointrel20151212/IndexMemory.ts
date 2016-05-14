@@ -1,13 +1,4 @@
-var Promise = require('promise');
-
-function makeAlwaysSuccessfulPromise(result) {
-    var promise = new Promise(function (resolve, reject) {
-        // reject("Unfinished");
-        resolve(result);
-    });
-    
-    return promise;
-}
+import { makeAlwaysSuccessfulPromise } from "../respond";
 
 function IndexMemory() {
     // this.stores = [];
@@ -157,4 +148,4 @@ IndexMemory.prototype.findAllC = function(a, b) {
     return makeAlwaysSuccessfulPromise(indexEntries.versions || []);
 };
 
-module.exports = IndexMemory; 
+export = IndexMemory;
