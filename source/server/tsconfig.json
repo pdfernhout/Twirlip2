@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "rootDir": "./ts",  
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": false,
+        "noLib": false,
+        "outDir": "./js/"
+    }
+}

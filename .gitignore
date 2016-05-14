@@ -3,4 +3,5 @@
 /npm-debug.log
 /.externalToolBuilders
 /source/webapp/js/**/*.js
+/source/server/js/**/*.js
 
