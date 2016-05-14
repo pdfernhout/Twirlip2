@@ -2,5 +2,5 @@
 /.project
 /npm-debug.log
 /.externalToolBuilders
+/source/webapp/js/**/*.js
 
-webapp/js
