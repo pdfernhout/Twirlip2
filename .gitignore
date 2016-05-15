@@ -4,4 +4,4 @@
 /.externalToolBuilders
 /source/webapp/js/**/*.js
 /source/server/js/**/*.js
-
+/tests/**/*.js
