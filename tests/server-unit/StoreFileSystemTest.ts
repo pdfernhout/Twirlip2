@@ -1,7 +1,11 @@
-var expect  = require("chai").expect;
-var StoreFileSystem = require("../server/pointrel20151212/StoreFileSystem");
+import expect = require('intern/chai!expect');
+import bdd =  require('intern!bdd');
+const describe = bdd.describe;
+const it = bdd.it;
 
-var fs = require("fs");
+import fs = require("fs");
+
+import StoreFileSystem = require("../../source/server/ts/pointrel20151212/StoreFileSystem");
 
 describe("Pointrel20151212 StoreMemory test", function() {
 

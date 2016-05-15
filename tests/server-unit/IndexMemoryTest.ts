@@ -1,8 +1,12 @@
-var expect  = require("chai").expect;
-var StoreMemory = require("../server/pointrel20151212/StoreMemory");
-var IndexMemory = require("../server/pointrel20151212/IndexMemory");
+import expect = require('intern/chai!expect');
+import bdd =  require('intern!bdd');
+const describe = bdd.describe;
+const it = bdd.it;
 
-var fs = require("fs");
+import fs = require("fs");
+
+import StoreMemory = require("../../source/server/ts/pointrel20151212/StoreMemory");
+import IndexMemory = require("../../source/server/ts/pointrel20151212/IndexMemory");
 
 describe("Pointrel20151212 IndexMemory test", function() {
 
@@ -48,4 +52,3 @@ describe("Pointrel20151212 IndexMemory test", function() {
 	});
 	
 });
-    

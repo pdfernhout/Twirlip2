@@ -1,5 +1,9 @@
-var expect = require("chai").expect;
-var request = require("request");
+import expect = require('intern/chai!expect');
+import bdd =  require('intern!bdd');
+const describe = bdd.describe;
+const it = bdd.it;
+
+import request = require("request");
 
 describe("Twirlip storage test", function() {
 
@@ -25,7 +29,8 @@ describe("Twirlip storage test", function() {
 
         var sha256OfTestObject1 = "08cdffa72235eee956662491d59483adba1fdda20888d5fbf69b54fa75e3b1ff";
 
-        it("stores some data", function(done) {
+        it("stores some data", function() {
+            const done = this.async();
             request.post({
                 url: storeURL,
                 form: {
@@ -40,11 +45,12 @@ describe("Twirlip storage test", function() {
                 expect(body.success).to.equal(true);
                 expect(body.status).to.equal("OK");
                 expect(body.sha256).to.equal(sha256OfTestObject1);
-                done();
+                done.resolve();
             });
         });
 
-        it("retrieves some indexed data", function(done) {
+        it("retrieves some indexed data", function() {
+            const done = this.async();
             request.post({
                 url: storeURL,
                 form: {
@@ -60,11 +66,12 @@ describe("Twirlip storage test", function() {
                 expect(body.success).to.equal(true);
                 expect(body.status).to.equal("OK");
                 expect(body.c).to.deep.equal(testObject1.c);
-                done();
+                done.resolve();
             });
         });
 
-        it("retrieves a bunch of indexed data", function(done) {
+        it("retrieves a bunch of indexed data", function() {
+            const done = this.async();
             request.post({
                 url: storeURL,
                 form: {
@@ -80,7 +87,7 @@ describe("Twirlip storage test", function() {
                 expect(body.success).to.equal(true);
                 expect(body.status).to.equal("OK");
                 expect(body.allC.length).to.be.greaterThan(0);
-                done();
+                done.resolve();
             });
         });
     });

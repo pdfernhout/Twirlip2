@@ -1,5 +1,9 @@
-var expect = require("chai").expect;
-var request = require("request");
+import expect = require('intern/chai!expect');
+import bdd =  require('intern!bdd');
+const describe = bdd.describe;
+const it = bdd.it;
+
+import request = require("request");
 
 describe("Twirlip storage test", function() {
 
@@ -9,7 +13,8 @@ describe("Twirlip storage test", function() {
 	    var testContent = "Hello, storage!";
 		var sha256Expected = "559abfcbfa056c176d09dc89a8bfce3004ae168b020e934d50e419e4fcd98535";
 	    
-		it("stores some data", function(done) {
+		it("stores some data", function() {
+			const done = this.async();
 			request.post({
 				url: url,
 				form: {
@@ -24,11 +29,12 @@ describe("Twirlip storage test", function() {
 				expect(body.success).to.equal(true);
 				expect(body.status).to.equal("OK");
 				expect(body.sha256).to.equal(sha256Expected);
-				done();
+				done.resolve();
 			});
 		});
 		
-		it("retrieves some data", function(done) {
+		it("retrieves some data", function() {
+			const done = this.async();
 			request.post({
 				url: url,
 				form: {
@@ -43,7 +49,7 @@ describe("Twirlip storage test", function() {
 				expect(body.success).to.equal(true);
 				expect(body.status).to.equal("OK");
 				expect(body.content).to.equal(testContent);
-				done();
+				done.resolve();
 			});
 		});
 	});

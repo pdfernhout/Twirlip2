@@ -1,5 +1,9 @@
-var expect = require("chai").expect;
-var request = require("request");
+import expect = require('intern/chai!expect');
+import bdd =  require('intern!bdd');
+const describe = bdd.describe;
+const it = bdd.it;
+
+import request = require("request");
 
 describe("Twirlip server test", function() {
 
@@ -7,7 +11,8 @@ describe("Twirlip server test", function() {
 
 		var url = "http://localhost:9000/api/proxy";
 
-		it.only("returns RSS feed", function(done) {
+		it("returns RSS feed", function() {
+			const done = this.async();
 			request.post({
 				url: url,
 				form: {
@@ -20,7 +25,7 @@ describe("Twirlip server test", function() {
 				expect(body.success).to.equal(true);
 				expect(body.status).to.equal("OK");
 				expect(body.content).to.match(/^<\?xml/);
-				done();
+				done.resolve();
 			});
 		});
 	});

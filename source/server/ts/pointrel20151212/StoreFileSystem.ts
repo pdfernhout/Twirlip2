@@ -18,7 +18,7 @@ function makeShardName() {
     return "shard-" + uuid4 + ".twirlip";
 }
 
-function StoreFileSystem(storageDirectory, defaultMetadata) {
+function StoreFileSystem(storageDirectory?, defaultMetadata?) {
     this.storageDirectory = storageDirectory;
     this.shards = {};
     this.sha256ToShardAndPosition = {};

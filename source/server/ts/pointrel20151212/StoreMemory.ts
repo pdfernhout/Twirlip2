@@ -19,7 +19,7 @@ function makeSkeinName() {
     return "skein-" + uuid4 + ".pces";
 }
 
-function StoreMemory(defaultMetadata, index) {
+function StoreMemory(defaultMetadata?, index?) {
     this.skeins = {};
     this.sha256ToSkeinAndPosition = {};
     this.defaultMetadata = defaultMetadata || {};

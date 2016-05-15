@@ -1,9 +1,12 @@
-var expect = require("chai").expect;
+import expect = require('intern/chai!expect');
+import bdd =  require('intern!bdd');
+const describe = bdd.describe;
+const it = bdd.it;
 
 require("amd-loader");
-var sanitizeHTML = require("../webapp/js/sanitizeHTML");
-var mithril = require("mithril");
-var DOMParser = require('xmldom').DOMParser;
+import sanitizeHTML = require("../../source/webapp/ts/sanitizeHTML");
+import mithril = require("mithril");
+import { DOMParser } from 'xmldom';
 
 describe("sanitizeHTML strict test", function() {
 
@@ -75,5 +78,3 @@ describe("sanitizeHTML with parameters test", function() {
         expect(result).to.deep.equal([ { tag: 'span', attrs: {}, children: [ 'alert("hello from JavaScript");' ] } ]);
     });
 });
-
-

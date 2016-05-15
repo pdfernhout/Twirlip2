@@ -1,0 +1,6 @@
+{
+  "ambientDependencies": {
+    "mithril": "registry:dt/mithril#0.0.0+20160501155657",
+    "xmldom": "registry:dt/xmldom#0.1.22+20160319053438"
+  }
+}
