@@ -42,7 +42,7 @@ define({
 	},
 
 	// Unit test suite(s) to run in each browser
-	suites: [ /* 'myPackage/tests/foo', 'myPackage/tests/bar' */ ],
+	suites: [ 'tests/server-unit/helloTest' ],
 
 	// Functional test suite(s) to execute against each browser once unit tests are completed
 	functionalSuites: [ /* 'myPackage/tests/functional' */ ],
